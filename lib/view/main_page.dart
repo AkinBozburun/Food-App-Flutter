@@ -93,6 +93,7 @@ _categories()
           itemCount: 6,
           itemBuilder: (context, index) => Container
           (
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration
             (
               borderRadius: Meisures.border16,
@@ -100,11 +101,11 @@ _categories()
             ),
             child: Column
             (
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children:
               [
-                Image.asset("images/Appetizer.png"),
-                Text("Dinner",style: Styles().categorieText)
+                Image.asset("images/breakfast.png"),
+                const SizedBox(height: 12),
+                Text("Breakfast",style: Styles().categorieText)
               ],
             ),
           ),
