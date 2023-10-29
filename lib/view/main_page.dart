@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_food_app/utils/categorie_datas.dart';
 import 'package:my_food_app/utils/meisures.dart';
 import 'package:my_food_app/utils/styles.dart';
 
@@ -20,8 +21,9 @@ class _MainPageState extends State<MainPage>
       backgroundColor: Styles.greenColor,
       appBar: AppBar
       (
-        toolbarHeight: Meisures.height*0.08,
-        backgroundColor: Colors.transparent,        
+        toolbarHeight: Meesures.height*0.08,
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
         title: Column
         (
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,16 +56,43 @@ class _MainPageState extends State<MainPage>
           ],
         ),
       ),
-      body: Container
+      body: SingleChildScrollView
       (
-        width: Meisures.width,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration
+        physics: const NeverScrollableScrollPhysics(),
+        child: Container
         (
-          color: Styles.whiteColor,
-          borderRadius: BorderRadius.only(topLeft: Meisures.radius16, topRight: Meisures.radius16),
+          height: Meesures.height,
+          width: Meesures.width,
+          padding: const EdgeInsets.only(top: 10),
+          decoration: BoxDecoration
+          (
+            color: Styles.whiteColor,
+            borderRadius: BorderRadius.only(topLeft: Meesures.radius16, topRight: Meesures.radius16),
+          ),
+          child: Column
+          (
+            mainAxisAlignment: MainAxisAlignment.start,
+            children:
+            [
+              Container(height: 4,width: 36,color: Styles.darkGreyColor),              
+              SizedBox
+              (
+                height: 500,
+                child: ListView
+                (
+                  physics: const ClampingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  children:
+                  [
+                    _categories(),
+                    _recentlyRecipes(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-        child: _categories(),
       ),
     );
   }
@@ -71,46 +100,90 @@ class _MainPageState extends State<MainPage>
 
 _categories()
 {
-  return Column
+  return Container
   (
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children:
-    [
-      Align(alignment: Alignment.center,child: Container(height: 4,width: 36,color: Styles.darkGreyColor)),
-      const SizedBox(height: 12),
-      Text("Categories",style: Styles().subTitleBlack),
-      const SizedBox(height: 12),
-      Expanded
-      (
-        child: GridView.builder
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Column
+    (
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:
+      [
+        Text("Categories",style: Styles().subTitleBlack),
+        const SizedBox(height: 12),
+        SizedBox
         (
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount
-          (
-            crossAxisCount: 3, childAspectRatio: 4/5,
-            mainAxisSpacing: 16, crossAxisSpacing: 12
-          ),
-          itemCount: 6,
-          itemBuilder: (context, index) => Container
-          (
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration
+          height: 340,
+          child: GridView.builder
+          (            
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount
             (
-              borderRadius: Meisures.border16,
-              color: Styles.greyColor,
+              crossAxisCount: 3, childAspectRatio: 4/5,
+              mainAxisSpacing: 16, crossAxisSpacing: 12
             ),
-            child: Column
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 6,
+            itemBuilder: (context, index) => Container
             (
-              children:
-              [
-                Image.asset("images/breakfast.png"),
-                const SizedBox(height: 12),
-                Text("Breakfast",style: Styles().categorieText)
-              ],
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration
+              (
+                borderRadius: Meesures.border16,
+                color: Styles.greyColor,
+              ),
+              child: Column
+              (
+                children:
+                [
+                  Image.asset(categories[index]["icon"]),
+                  const SizedBox(height: 12),
+                  Text(categories[index]["text"],style: Styles().categorieText),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    ],
+      ],
+    ),
+  );
+}
+
+_recentlyRecipes()
+{
+  return Container
+  (
+    padding: const EdgeInsets.only(left: 16),
+    margin: const EdgeInsets.only(bottom: 8),
+    child: Column
+    (
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:
+      [
+        Text("Recently", style: Styles().subTitleBlack),
+        const SizedBox(height: 12),
+        SizedBox
+        (
+          height: 192,
+          child: ListView.separated
+          (
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: 6,
+            itemBuilder: (context, index) => Container
+            (
+              padding: const EdgeInsets.all(20),
+              width: Meesures.width*0.12,
+              decoration: BoxDecoration
+              (
+                color: Styles.greyColor,
+                borderRadius: Meesures.border16
+              ),
+              child: Image.asset("images/dessert.png"),
+            ),
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
+          ),
+        ),
+      ],
+    ),
   );
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Meisures
+class Meesures
 {
   static double height = WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.height;
   static double width = WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.width;
