@@ -77,7 +77,7 @@ class _MainPageState extends State<MainPage>
               Container(height: 4,width: 36,color: Styles.darkGreyColor),              
               SizedBox
               (
-                height: 500,
+                height:MediaQuery.of(context).size.height*0.8,
                 child: ListView
                 (
                   physics: const ClampingScrollPhysics(),
@@ -153,7 +153,7 @@ _recentlyRecipes()
   return Container
   (
     padding: const EdgeInsets.only(left: 16),
-    margin: const EdgeInsets.only(bottom: 8),
+    margin: const EdgeInsets.only(bottom: 64),
     child: Column
     (
       crossAxisAlignment: CrossAxisAlignment.start,
