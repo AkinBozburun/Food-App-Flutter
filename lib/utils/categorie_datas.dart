@@ -2,12 +2,12 @@ List categories =
 [  
   {
     "icon" : "images/breakfast.png",
-    "text" : "Breakfast",
+    "text" : "Breakfasts",
     "api" : "type=breakfast",
   },
   {
     "icon" : "images/main.png",
-    "text" : "Main Course",
+    "text" : "Main Courses",
     "api" : "type=main course",
   },
   {

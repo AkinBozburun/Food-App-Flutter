@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_food_app/utils/categorie_datas.dart';
 import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/styles.dart';
+import 'package:my_food_app/view/search_page.dart';
 
 class MainPage extends StatefulWidget
 {
@@ -24,7 +25,7 @@ class _MainPageState extends State<MainPage>
       backgroundColor: Styles.greenColor,
       appBar: AppBar
       (
-        toolbarHeight: height*0.24,
+        toolbarHeight: height*0.2,
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
         title: Column
@@ -77,17 +78,20 @@ class _MainPageState extends State<MainPage>
             mainAxisAlignment: MainAxisAlignment.start,
             children:
             [
-              Container(height: 4,width: 36,color: Styles.darkGreyColor),              
+              Container(height: 4,width: 36,color: Styles.darkGreyColor),  
+              const SizedBox(height: 12),            
               Container
               (
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 height:height*0.8,
                 child: ListView
                 (
                   children:
                   [
                     _categories(),
+                    const SizedBox(height: 24),
                     _recentlyRecipes(width),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -101,30 +105,33 @@ class _MainPageState extends State<MainPage>
 
 _categories()
 {
-  return Container
+  return Column
   (
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Column
-    (
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children:
-      [
-        Text("Categories",style: Styles().subTitleBlack),
-        const SizedBox(height: 12),
-        SizedBox
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children:
+    [
+      Text("Categories",style: Styles().subTitleBlack),
+      const SizedBox(height: 12),
+      SizedBox
+      (
+        height: 350,
+        child: GridView.builder
         (
-          height: 340,
-          child: GridView.builder
-          (            
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount
-            (
-              crossAxisCount: 3, childAspectRatio: 4/5,
-              mainAxisSpacing: 16, crossAxisSpacing: 12
-            ),
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 6,
-            itemBuilder: (context, index) => Container
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount
+          (
+            crossAxisCount: 3, childAspectRatio: 5/7,
+            mainAxisSpacing: 16, crossAxisSpacing: 12
+          ),
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: 6,
+          itemBuilder: (context, index) => InkWell
+          (
+            onTap: ()
+            {
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+              SearchPage(foodName: categories[index]["text"])));
+            },
+            child: Container
             (
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration
@@ -134,6 +141,7 @@ _categories()
               ),
               child: Column
               (
+                mainAxisAlignment: MainAxisAlignment.center,
                 children:
                 [
                   Image.asset(categories[index]["icon"]),
@@ -144,8 +152,8 @@ _categories()
             ),
           ),
         ),
-      ],
-    ),
+      ),
+    ],
   );
 }
 
@@ -153,7 +161,6 @@ _recentlyRecipes(width)
 {
   return Container
   (
-    padding: const EdgeInsets.only(left: 16),
     margin: const EdgeInsets.only(bottom: 64),
     child: Column
     (
