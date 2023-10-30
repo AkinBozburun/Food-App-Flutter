@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_food_app/utils/categorie_datas.dart';
-import 'package:my_food_app/utils/meisures.dart';
+import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/styles.dart';
 
 class MainPage extends StatefulWidget
@@ -16,12 +16,15 @@ class _MainPageState extends State<MainPage>
   @override
   Widget build(BuildContext context)
   {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold
     (
       backgroundColor: Styles.greenColor,
       appBar: AppBar
       (
-        toolbarHeight: Meesures.height*0.08,
+        toolbarHeight: height*0.24,
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
         title: Column
@@ -61,13 +64,13 @@ class _MainPageState extends State<MainPage>
         physics: const NeverScrollableScrollPhysics(),
         child: Container
         (
-          height: Meesures.height,
-          width: Meesures.width,
+          height: height,
+          width: width,
           padding: const EdgeInsets.only(top: 10),
           decoration: BoxDecoration
           (
             color: Styles.whiteColor,
-            borderRadius: BorderRadius.only(topLeft: Meesures.radius16, topRight: Meesures.radius16),
+            borderRadius: BorderRadius.only(topLeft: Measures.radius16, topRight: Measures.radius16),
           ),
           child: Column
           (
@@ -75,18 +78,16 @@ class _MainPageState extends State<MainPage>
             children:
             [
               Container(height: 4,width: 36,color: Styles.darkGreyColor),              
-              SizedBox
+              Container
               (
-                height:MediaQuery.of(context).size.height*0.8,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                height:height*0.8,
                 child: ListView
                 (
-                  physics: const ClampingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
                   children:
                   [
                     _categories(),
-                    _recentlyRecipes(),
+                    _recentlyRecipes(width),
                   ],
                 ),
               ),
@@ -128,7 +129,7 @@ _categories()
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration
               (
-                borderRadius: Meesures.border16,
+                borderRadius: Measures.border16,
                 color: Styles.greyColor,
               ),
               child: Column
@@ -148,7 +149,7 @@ _categories()
   );
 }
 
-_recentlyRecipes()
+_recentlyRecipes(width)
 {
   return Container
   (
@@ -172,11 +173,11 @@ _recentlyRecipes()
             itemBuilder: (context, index) => Container
             (
               padding: const EdgeInsets.all(20),
-              width: Meesures.width*0.12,
+              width: width*0.3,
               decoration: BoxDecoration
               (
                 color: Styles.greyColor,
-                borderRadius: Meesures.border16
+                borderRadius: Measures.border16
               ),
               child: Image.asset("images/dessert.png"),
             ),
