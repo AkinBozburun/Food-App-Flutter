@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_food_app/utils/styles.dart';
+import 'package:my_food_app/view/filter_bottomsheet.dart';
 
 class SearchPage extends StatelessWidget
 {
@@ -18,14 +19,13 @@ class SearchPage extends StatelessWidget
         backgroundColor: Styles.greenColor,
         elevation: 2,
         leading: IconButton(onPressed: ()=> Navigator.pop(context),
-        icon: Icon(Icons.keyboard_arrow_left_rounded, size: 36, color: Styles.whiteColor)),       
+        icon: Icon(Icons.keyboard_arrow_left_rounded, size: 36, color: Styles.whiteColor)),
         title: ListTile
         (          
           title: Text(foodName,style: Styles().titleWhite),
           subtitle: Text("46 Recipes, Vegetarian",style: Styles().foodListSubTitle),
         ),
-        actions: [IconButton(onPressed: (){},
-        icon: Icon(Icons.filter_alt, size: 32, color: Styles.whiteColor))],
+        actions: const [FilterBottomSheet()],
       ),
       body: _foodList()
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_food_app/utils/categorie_datas.dart';
+import 'package:my_food_app/utils/local_datas.dart';
 import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/styles.dart';
 import 'package:my_food_app/view/search_page.dart';
