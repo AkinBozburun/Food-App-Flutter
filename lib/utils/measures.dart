@@ -4,4 +4,7 @@ class Measures
 {
   static Radius radius16 = const Radius.circular(16);
   static BorderRadius border16 = BorderRadius.circular(16);
+  static BorderRadius border24 = BorderRadius.circular(24);
+  static EdgeInsets horizontal16 = const EdgeInsets.symmetric(horizontal: 16);
+  static EdgeInsets vertical16 = const EdgeInsets.symmetric(vertical: 16);
 }
