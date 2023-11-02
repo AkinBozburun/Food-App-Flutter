@@ -24,7 +24,7 @@ class Styles
   final foodListSubTitle = GoogleFonts.poppins(fontSize: 14, color: whiteColor, fontWeight: FontWeight.w400);
   final foodListText = GoogleFonts.poppins(fontSize: 14, color: blackColor, fontWeight: FontWeight.w400);
   
-  final bottomSheetTitleWhite = GoogleFonts.poppins(fontSize: 14, color: blackColor, fontWeight: FontWeight.w500);
+  final bottomSheetTitleWhite = GoogleFonts.poppins(fontSize: 14, color: whiteColor, fontWeight: FontWeight.w500);
   final bottomSheetTitleBlack = GoogleFonts.poppins(fontSize: 14, color: blackColor, fontWeight: FontWeight.w500);
   final bottomSheetSpeciesText = GoogleFonts.poppins(fontSize: 12, color: blackColor, fontWeight: FontWeight.w300);
 

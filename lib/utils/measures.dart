@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 class Measures
 {
   static Radius radius16 = const Radius.circular(16);
+  static BorderRadius border12 = BorderRadius.circular(12);
   static BorderRadius border16 = BorderRadius.circular(16);
   static BorderRadius border24 = BorderRadius.circular(24);
+  static EdgeInsets all16 = const EdgeInsets.all(16);
+
   static EdgeInsets horizontal16 = const EdgeInsets.symmetric(horizontal: 16);
   static EdgeInsets vertical16 = const EdgeInsets.symmetric(vertical: 16);
 }

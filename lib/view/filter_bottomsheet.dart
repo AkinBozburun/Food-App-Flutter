@@ -18,28 +18,27 @@ class FilterBottomSheet extends StatelessWidget
 
 _bottomSheet(context)
 {
-  double deviceHeight = MediaQuery.of(context).size.height;
   double deviceWidth = MediaQuery.of(context).size.width;
 
   showModalBottomSheet
   (
-    //isScrollControlled: true,
+    isScrollControlled: true,
+    useSafeArea: true,
     context: context,
     builder: (context) => Container
     (
-      height: deviceHeight,
-      margin: const EdgeInsets.all(16),
-      child: Column
+      margin: Measures.all16,
+      child: Wrap
       (
-        //runSpacing: 16,
-        //alignment: WrapAlignment.center,
+        alignment: WrapAlignment.center,
+        runSpacing: 12,
         children:
-        [
-          Container(height: 4,width: 36,color: Styles.darkGreyColor),
-          
+        [          
+          Container(height: 4,width: 36,color: Styles.darkGreyColor),          
           _gridview("Sort by", sortList, deviceWidth),          
           _gridview("Diet", dietList, deviceWidth),          
-          _gridview("Cuisine", cuisinesList, deviceWidth),          
+          _gridview("Cuisine", cuisinesList, deviceWidth),
+          Divider(color: Styles.greyColor,),
           _buttonsRow(deviceWidth),
         ],
       ),
@@ -86,20 +85,30 @@ _gridview(String title, List gridList, double width)
 
 _buttonsRow(width)
 {
+  button(Text txt, Color clr, tap) => InkWell
+  (
+    borderRadius: Measures.border12,
+    onTap: tap,
+    child: Ink
+    (
+      decoration: BoxDecoration
+      (
+        color: clr,
+        borderRadius: Measures.border12
+      ),
+      width: width*0.4,
+      height: 42,
+      child: Center(child: txt)
+    ),
+  );
+
   return Row
   (
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children:
     [
-      InkWell
-      (
-        onTap: (){},
-        child: Ink
-        (
-          height: 36,
-          color: Styles.greyColor,
-          child: const Center(child: Text("Clear All"))
-        ),
-      ),
+      button(Text("Clear All",style: Styles().bottomSheetTitleBlack,), Styles.greyColor, ()=> print("temizle")),
+      button(Text("Show Results",style: Styles().bottomSheetTitleWhite), Styles.greenColor ,()=> print("sonuçlar")),
     ],
   );
 }
