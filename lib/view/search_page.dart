@@ -41,7 +41,7 @@ _foodList(width)
     padding: const EdgeInsets.all(16),
     itemCount: 32,
     itemBuilder: (context, index) => InkWell
-    (         
+    (      
       onTap: (){},
       borderRadius: Measures.border12,
       child: Ink(width: width,child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:

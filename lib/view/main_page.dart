@@ -60,42 +60,45 @@ class _MainPageState extends State<MainPage>
           ],
         ),
       ),
-      body: SingleChildScrollView
+      body: SafeArea
       (
-        physics: const NeverScrollableScrollPhysics(),
-        child: Container
+        child: SingleChildScrollView
         (
-          height: height,
-          width: width,
-          padding: const EdgeInsets.only(top: 10),
-          decoration: BoxDecoration
+          physics: const NeverScrollableScrollPhysics(),
+          child: Container
           (
-            color: Styles.whiteColor,
-            borderRadius: BorderRadius.only(topLeft: Measures.radius16, topRight: Measures.radius16),
-          ),
-          child: Column
-          (
-            mainAxisAlignment: MainAxisAlignment.start,
-            children:
-            [
-              Container(height: 4,width: 36,color: Styles.darkGreyColor),  
-              const SizedBox(height: 12),            
-              Container
-              (
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                height:height*0.8,
-                child: ListView
+            height: height,
+            width: width,
+            padding: const EdgeInsets.only(top: 10),
+            decoration: BoxDecoration
+            (
+              color: Styles.whiteColor,
+              borderRadius: BorderRadius.only(topLeft: Measures.radius16, topRight: Measures.radius16),
+            ),
+            child: Column
+            (
+              mainAxisAlignment: MainAxisAlignment.start,
+              children:
+              [
+                Container(height: 4,width: 36,color: Styles.darkGreyColor),  
+                const SizedBox(height: 12),            
+                Container
                 (
-                  children:
-                  [
-                    _categories(width),
-                    const SizedBox(height: 24),
-                    _recently(width),
-                    const SizedBox(height: 16),
-                  ],
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  height:height*0.8,
+                  child: ListView
+                  (
+                    children:
+                    [
+                      _categories(width),
+                      const SizedBox(height: 24),
+                      _recently(width),
+                      const SizedBox(height: 64),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -129,7 +132,7 @@ _categories(width)
             onTap: ()
             {
               Navigator.push(context, MaterialPageRoute(builder: (context) =>
-              SearchPage(foodName: categories[index]["text"],deviceWidth: width)));
+              SearchPage(foodName: categories[index]["text"], deviceWidth: width)));
             },
             child: Container
             (
@@ -159,25 +162,25 @@ _categories(width)
 
 _recently(width)
 {
-  return Container
+  return Column
   (
-    margin: const EdgeInsets.only(bottom: 64),
-    child: Column
-    (
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children:
-      [
-        Text("Recently", style: Styles().subTitleBlack),
-        const SizedBox(height: 12),
-        SizedBox
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children:
+    [
+      Text("Recently", style: Styles().subTitleBlack),
+      const SizedBox(height: 12),
+      SizedBox
+      (
+        height: 212,
+        child: ListView.separated
         (
-          height: 212,
-          child: ListView.separated
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: 6,
+          itemBuilder: (context, index) => GestureDetector
           (
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: 6,
-            itemBuilder: (context, index) => Container
+            onTap: () => print("${index+1}. recently tıklandı."),
+            child: Container
             (
               width: width*0.3,
               decoration: BoxDecoration
@@ -224,10 +227,10 @@ _recently(width)
                 ],
               ),
             ),
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
           ),
+          separatorBuilder: (context, index) => const SizedBox(width: 12),
         ),
-      ],
-    ),
+      ),
+    ],
   );
 }
