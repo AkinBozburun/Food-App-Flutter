@@ -34,11 +34,11 @@ _bottomSheet(context)
         runSpacing: 12,
         children:
         [          
-          Container(height: 4,width: 36,color: Styles.darkGreyColor),          
-          _gridview("Sort by", sortList, deviceWidth),          
-          _gridview("Diet", dietList, deviceWidth),          
+          Container(height: 4,width: 36,color: Styles.darkGreyColor),
+          _gridview("Sort by", sortList, deviceWidth),
+          _gridview("Diet", dietList, deviceWidth),
           _gridview("Cuisine", cuisinesList, deviceWidth),
-          Divider(color: Styles.greyColor,),
+          Divider(color: Styles.greyColor),
           _buttonsRow(deviceWidth),
         ],
       ),
@@ -63,7 +63,6 @@ _gridview(String title, List gridList, double width)
         (
           itemCount: gridList.length,
           scrollDirection: Axis.horizontal,
-          physics: const NeverScrollableScrollPhysics(),
           gridDelegate:  const SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           mainAxisSpacing: 6,
           crossAxisSpacing: 6,

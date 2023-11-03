@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/styles.dart';
 import 'package:my_food_app/view/filter_bottomsheet.dart';
 
 class SearchPage extends StatelessWidget
 {
   final String foodName;
+  final double deviceWidth;
 
-  const SearchPage({super.key, required this.foodName});
+  const SearchPage({super.key, required this.foodName, required this.deviceWidth});
 
   @override
   Widget build(BuildContext context)
@@ -27,25 +29,36 @@ class SearchPage extends StatelessWidget
         ),
         actions: const [FilterBottomSheet()],
       ),
-      body: _foodList()
+      body: _foodList(deviceWidth)
     );
   }
 }
 
-_foodList()
+_foodList(width)
 {
   return ListView.separated
   (
     padding: const EdgeInsets.all(16),
     itemCount: 32,
-    itemBuilder: (context, index) => ListTile
-    (
+    itemBuilder: (context, index) => InkWell
+    (         
       onTap: (){},
-      contentPadding: const EdgeInsets.symmetric(vertical: 16),
-      title: Text("Chocolate Silk Pie with Marshmallow Meringue",style: Styles().foodListText),
-      leading: Image.asset("images/cake.jpg"),
-      trailing: Icon(Icons.keyboard_arrow_right_rounded,color: Styles.blackColor),
+      borderRadius: Measures.border12,
+      child: Ink(width: width,child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:
+      [
+        ClipRRect
+        (
+          borderRadius: Measures.border12,
+          child: Image.asset("images/cake.jpg",width: 76, height: 76, fit: BoxFit.cover),
+        ),
+        SizedBox
+        (
+          width: 240,
+          child: Text("Chocolate Silk Pie with Marshmallow Meringue",maxLines: 3,style: Styles().foodListText)
+        ),
+        Icon(Icons.keyboard_arrow_right_rounded,color: Styles.blackColor, size: 26),
+      ])),
     ),
-    separatorBuilder: (context, index) => Divider(color: Styles.greyColor)
+    separatorBuilder: (context, index) => Divider(height: 24, color: Styles.greyColor),
   );
 }

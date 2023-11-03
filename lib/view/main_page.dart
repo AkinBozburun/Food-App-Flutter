@@ -88,9 +88,9 @@ class _MainPageState extends State<MainPage>
                 (
                   children:
                   [
-                    _categories(),
+                    _categories(width),
                     const SizedBox(height: 24),
-                    _recentlyRecipes(width),
+                    _recently(width),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -103,7 +103,7 @@ class _MainPageState extends State<MainPage>
   }
 }
 
-_categories()
+_categories(width)
 {
   return Column
   (
@@ -129,7 +129,7 @@ _categories()
             onTap: ()
             {
               Navigator.push(context, MaterialPageRoute(builder: (context) =>
-              SearchPage(foodName: categories[index]["text"])));
+              SearchPage(foodName: categories[index]["text"],deviceWidth: width)));
             },
             child: Container
             (
@@ -157,7 +157,7 @@ _categories()
   );
 }
 
-_recentlyRecipes(width)
+_recently(width)
 {
   return Container
   (
@@ -171,7 +171,7 @@ _recentlyRecipes(width)
         const SizedBox(height: 12),
         SizedBox
         (
-          height: 192,
+          height: 212,
           child: ListView.separated
           (
             shrinkWrap: true,
@@ -179,14 +179,50 @@ _recentlyRecipes(width)
             itemCount: 6,
             itemBuilder: (context, index) => Container
             (
-              padding: const EdgeInsets.all(20),
               width: width*0.3,
               decoration: BoxDecoration
               (
                 color: Styles.greyColor,
                 borderRadius: Measures.border16
               ),
-              child: Image.asset("images/dessert.png"),
+              child: Column
+              (
+                children:
+                [
+                  ClipRRect
+                  (
+                    borderRadius: BorderRadius.only(topLeft: Measures.radius16,topRight: Measures.radius16),
+                    child: Image.asset("images/cake.jpg",fit: BoxFit.cover,height: 104)
+                  ),
+                  const SizedBox(height: 6),
+                  Container
+                  (
+                    padding: Measures.horizontal8,
+                    child: Column
+                    (                    
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children:
+                      [
+                        Text("Super Delicious Cake",style: Styles().recentlyTxt1),
+                        const SizedBox(height: 6),
+                        Row(children:
+                        [
+                          Image.asset("images/cooking.png"),
+                          const SizedBox(width: 6),
+                          Text("12 Min.", style: Styles().recentlyText2),
+                        ]),
+                        const SizedBox(height: 6),
+                        Row(children:
+                        [
+                          const Icon(Icons.star_rounded,size: 18),
+                          const SizedBox(width: 2),
+                          Text("6/10", style: Styles().recentlyText3),
+                        ]),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
             separatorBuilder: (context, index) => const SizedBox(width: 12),
           ),
