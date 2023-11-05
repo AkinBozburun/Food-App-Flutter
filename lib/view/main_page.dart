@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_food_app/utils/local_datas.dart';
 import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/styles.dart';
+import 'package:my_food_app/view/food_page.dart';
 import 'package:my_food_app/view/search_page.dart';
 
 class MainPage extends StatefulWidget
@@ -92,7 +93,7 @@ class _MainPageState extends State<MainPage>
                     [
                       _categories(width),
                       const SizedBox(height: 24),
-                      _recently(width),
+                      _recently(width,context),
                       const SizedBox(height: 64),
                     ],
                   ),
@@ -160,7 +161,7 @@ _categories(width)
   );
 }
 
-_recently(width)
+_recently(width,context)
 {
   return Column
   (
@@ -179,7 +180,7 @@ _recently(width)
           itemCount: 6,
           itemBuilder: (context, index) => GestureDetector
           (
-            onTap: () => print("${index+1}. recently tıklandı."),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FoodPage())),
             child: Container
             (
               width: width*0.3,
