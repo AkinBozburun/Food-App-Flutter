@@ -17,17 +17,44 @@ class _FoodPageState extends State<FoodPage>
   {
     return Scaffold
     (
-      appBar:AppBar
+      body: CustomScrollView
       (
-        automaticallyImplyLeading: false,
-        leading: IconButton(onPressed: ()=> Navigator.pop(context),
-        icon: Icon(Icons.keyboard_arrow_left_rounded, size: 36, color: Styles.whiteColor)),
-        backgroundColor: Styles.greenColor,
-        title: Text("Berry Banana Breakfast Smoothie",style: Styles().titleWhite),
+        slivers:
+        [
+          SliverAppBar
+          (
+            pinned: true,
+            floating: false,
+            expandedHeight: 256,
+            backgroundColor: Styles.greenColor,            
+            flexibleSpace: FlexibleSpaceBar
+            (
+              expandedTitleScale: 1,
+              titlePadding: const EdgeInsets.only(left: 64,bottom: 6),
+              title: Text("Berry Banana Breakfast Smoothie",style: Styles().titleWhite),
+              background: Image.asset("images/cake.jpg",fit: BoxFit.cover,),
+            ),
+          ),
+          SliverToBoxAdapter
+          (
+            child: _bodyFood(),
+          ),
+        ],
       ),
-      body: _bodyFood(),
     );
   }
+}
+
+_appbar(context)
+{
+  return AppBar
+  (
+    automaticallyImplyLeading: false,
+    leading: IconButton(onPressed: ()=> Navigator.pop(context),
+    icon: Icon(Icons.keyboard_arrow_left_rounded, size: 36, color: Styles.whiteColor)),
+    backgroundColor: Styles.greenColor,
+    title: Text("Berry Banana Breakfast Smoothie",style: Styles().titleWhite),
+  );
 }
 
 _bodyFood()
