@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_food_app/utils/measures.dart';
+import 'package:my_food_app/utils/providers.dart';
 import 'package:my_food_app/utils/styles.dart';
+import 'package:provider/provider.dart';
 
 class FoodPage extends StatefulWidget
 {
@@ -12,65 +14,47 @@ class FoodPage extends StatefulWidget
 
 class _FoodPageState extends State<FoodPage>
 {
-  late ScrollController _scrollController;
   static const expandedHeight = 256.0;
 
   @override
   void initState()
   {
     super.initState();
-    _scrollController = ScrollController()..addListener(() => setState((){}));
+    Provider.of<AppBarProviders>(context,listen: false).initScrollController();
   }
-
-  bool get _isSliverAppBarExpanded =>
-  _scrollController.hasClients &&  _scrollController.offset > expandedHeight - kToolbarHeight;
 
   @override
-  Widget build(BuildContext context)
-  {
-    return Scaffold
-    (
-      body: CustomScrollView
-      (        
-        controller: _scrollController,
-        slivers:
-        [
-          SliverAppBar
-          (
-            pinned: true,
-            floating: false,
-            expandedHeight: expandedHeight,
-            automaticallyImplyLeading: false,
-            leading: IconButton(onPressed: ()=> Navigator.pop(context),
-            icon: Icon(Icons.keyboard_arrow_left_rounded, size: 36, color: Styles.whiteColor)),
-            backgroundColor: Styles.greenColor,
-             title: _isSliverAppBarExpanded ?
-             Text("Berry Banana Breakfast Smoothie",style: Styles().titleWhite)
-             : null,        
-            flexibleSpace: FlexibleSpaceBar
-            (
-              background: Image.asset("images/cake.jpg",fit: BoxFit.cover,),
-            ),
-          ),
-          SliverToBoxAdapter
-          (
-            child: _bodyFood(),
-          ),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold
+  (
+    body: CustomScrollView
+    (        
+      controller: Provider.of<AppBarProviders>(context,listen: false).scrollController,
+      slivers:
+      [
+        _customAppbar(context, expandedHeight),
+        SliverToBoxAdapter
+        (
+          child: _bodyFood(),
+        ),
+      ],
+    ),
+  );
 }
 
-_appbar(context)
+_customAppbar(context, height)
 {
-  return AppBar
+  final prov = Provider.of<AppBarProviders>(context);
+
+  return SliverAppBar
   (
+    pinned: true,
+    floating: false,
+    expandedHeight: height,
     automaticallyImplyLeading: false,
-    leading: IconButton(onPressed: ()=> Navigator.pop(context),
-    icon: Icon(Icons.keyboard_arrow_left_rounded, size: 36, color: Styles.whiteColor)),
+    leading: prov.isExpandedforIcon(context, height, ()=> Navigator.pop(context)),
     backgroundColor: Styles.greenColor,
-    title: Text("Berry Banana Breakfast Smoothie",style: Styles().titleWhite),
+    title: prov.isExpandedforTitle(context, height, ()=> Navigator.pop(context)),
+    flexibleSpace: FlexibleSpaceBar(background: Image.asset("images/cake.jpg",fit: BoxFit.cover)),
   );
 }
 
