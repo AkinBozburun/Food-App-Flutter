@@ -12,26 +12,43 @@ class FoodPage extends StatefulWidget
 
 class _FoodPageState extends State<FoodPage>
 {
+  late ScrollController _scrollController;
+  static const expandedHeight = 256.0;
+
+  @override
+  void initState()
+  {
+    super.initState();
+    _scrollController = ScrollController()..addListener(() => setState((){}));
+  }
+
+  bool get _isSliverAppBarExpanded =>
+  _scrollController.hasClients &&  _scrollController.offset > expandedHeight - kToolbarHeight;
+
   @override
   Widget build(BuildContext context)
   {
     return Scaffold
     (
       body: CustomScrollView
-      (
+      (        
+        controller: _scrollController,
         slivers:
         [
           SliverAppBar
           (
             pinned: true,
             floating: false,
-            expandedHeight: 256,
-            backgroundColor: Styles.greenColor,            
+            expandedHeight: expandedHeight,
+            automaticallyImplyLeading: false,
+            leading: IconButton(onPressed: ()=> Navigator.pop(context),
+            icon: Icon(Icons.keyboard_arrow_left_rounded, size: 36, color: Styles.whiteColor)),
+            backgroundColor: Styles.greenColor,
+             title: _isSliverAppBarExpanded ?
+             Text("Berry Banana Breakfast Smoothie",style: Styles().titleWhite)
+             : null,        
             flexibleSpace: FlexibleSpaceBar
             (
-              expandedTitleScale: 1,
-              titlePadding: const EdgeInsets.only(left: 64,bottom: 6),
-              title: Text("Berry Banana Breakfast Smoothie",style: Styles().titleWhite),
               background: Image.asset("images/cake.jpg",fit: BoxFit.cover,),
             ),
           ),
@@ -73,8 +90,8 @@ _bodyFood()
     crossAxisAlignment: CrossAxisAlignment.start,
     children:
     [
-      Text(titleText, style: Styles().titleBlack),
-      const SizedBox(height: 6),
+      Text(titleText, style: Styles().subTitleBlack),
+      const SizedBox(height: 8),
       Column(children: children)
     ],
   );
@@ -115,7 +132,12 @@ _bodyFood()
         runSpacing: 16,
         children:
         [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children:
+          Container
+          (
+            margin: const EdgeInsets.only(right: 32),
+            child: Text("Berry Banana Breakfast Smoothie",style: Styles().titleBlack)
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceAround,children:
           [
             foodInfoIcon("time", "5 min"),
             foodInfoIcon("healthcare", "64/100"),
@@ -137,6 +159,7 @@ _bodyFood()
             [
               ListView.separated
               (
+                padding: Measures.horizontal0,
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: 7,
@@ -159,6 +182,7 @@ _bodyFood()
             [
               ListView.separated
               (
+                padding: Measures.horizontal0,
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: instroList.length,

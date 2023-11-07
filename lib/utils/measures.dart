@@ -8,6 +8,7 @@ class Measures
   static BorderRadius border24 = BorderRadius.circular(24);
   static EdgeInsets all16 = const EdgeInsets.all(16);
 
+  static EdgeInsets horizontal0 =  const EdgeInsets.symmetric(horizontal: 0);
   static EdgeInsets horizontal8 = const EdgeInsets.symmetric(horizontal: 8);
   static EdgeInsets horizontal16 = const EdgeInsets.symmetric(horizontal: 16);
   static EdgeInsets vertical16 = const EdgeInsets.symmetric(vertical: 16);
