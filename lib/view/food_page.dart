@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_food_app/utils/local_datas.dart';
 import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/providers.dart';
 import 'package:my_food_app/utils/styles.dart';
@@ -56,7 +57,7 @@ _customAppbar(context)
         children:
         [
           IconButton(onPressed: ()=> Navigator.pop(context),
-          icon: Icon(Icons.keyboard_arrow_left_rounded,size: 32,color: Styles.whiteColor)),
+          icon: backIcon),
           Text("Berry Banana Breakfast Smoothie",style: Styles().titleWhite),
         ],
       ) : const Center(),
@@ -121,7 +122,30 @@ _bodyFood(context)
     (
       children:
       [
-        SizedBox(height: 300,width: double.maxFinite, child: Image.asset("images/cake.jpg", fit: BoxFit.cover)),
+        Stack(children:
+        [          
+          SizedBox(height: 300,width: double.maxFinite, child: Image.asset("images/cake.jpg", fit: BoxFit.cover)),
+          SafeArea
+          (
+            child: GestureDetector
+            (
+              onTap: () => Navigator.pop(context),
+              child: Container
+              (
+                decoration: BoxDecoration
+                (
+                  color: Colors.black12,
+                  borderRadius: Measures.border12
+                ),
+                margin: const EdgeInsets.only(left: 16,top: 12),
+                height: 42,
+                width: 42,
+                
+                child: Center(child: backIcon),
+              ),
+            ),
+          ),
+        ]),
         Container
         (
           margin: Measures.all16,
