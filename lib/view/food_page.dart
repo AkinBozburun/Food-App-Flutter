@@ -14,51 +14,57 @@ class FoodPage extends StatefulWidget
 
 class _FoodPageState extends State<FoodPage>
 {
-  static const expandedHeight = 256.0;
-
   @override
   void initState()
   {
+    Provider.of<AppBarProviders>(context,listen: false).initscroll();
     super.initState();
-    Provider.of<AppBarProviders>(context,listen: false).initScrollController();
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold
+  Widget build(BuildContext context)
+  {
+    return Scaffold
+    (
+      backgroundColor: Styles.whiteColor,
+      body: Stack
+      (
+        children:
+        [          
+          _bodyFood(context),
+          _customAppbar(context),
+        ],
+      ),
+    );
+  }
+}
+
+_customAppbar(context)
+{
+  final prov = Provider.of<AppBarProviders>(context);
+  return AnimatedContainer
   (
-    body: CustomScrollView
-    (        
-      controller: Provider.of<AppBarProviders>(context,listen: false).scrollController,
-      slivers:
-      [
-        _customAppbar(context, expandedHeight),
-        SliverToBoxAdapter
-        (
-          child: _bodyFood(),
-        ),
-      ],
+    duration: const Duration(milliseconds: 500),
+    curve: Curves.fastLinearToSlowEaseIn,
+    color: prov.appBarColor,
+    height: prov.height,
+    width: MediaQuery.of(context).size.width,
+    child: SafeArea
+    (
+      child: prov.childControl == true ? Row
+      (
+        children:
+        [
+          IconButton(onPressed: ()=> Navigator.pop(context),
+          icon: Icon(Icons.keyboard_arrow_left_rounded,size: 32,color: Styles.whiteColor)),
+          Text("Berry Banana Breakfast Smoothie",style: Styles().titleWhite),
+        ],
+      ) : const Center(),
     ),
   );
 }
 
-_customAppbar(context, height)
-{
-  final prov = Provider.of<AppBarProviders>(context);
-
-  return SliverAppBar
-  (
-    pinned: true,
-    floating: false,
-    expandedHeight: height,
-    automaticallyImplyLeading: false,
-    leading: prov.isExpandedforIcon(context, height, ()=> Navigator.pop(context)),
-    backgroundColor: Styles.greenColor,
-    title: prov.isExpandedforTitle(context, height, ()=> Navigator.pop(context)),
-    flexibleSpace: FlexibleSpaceBar(background: Image.asset("images/cake.jpg",fit: BoxFit.cover)),
-  );
-}
-
-_bodyFood()
+_bodyFood(context)
 {
   foodInfoIcon(iconName, info) =>
   Column(children:
@@ -106,103 +112,113 @@ _bodyFood()
     ),
   );
 
+  final prov = Provider.of<AppBarProviders>(context,listen: false);
+
   return SingleChildScrollView
   (
-    child: Container
+    controller: prov.scrollController,
+    child: Column
     (
-      padding: Measures.all16,
-      child: Wrap
-      (    
-        runSpacing: 16,
-        children:
-        [
-          Container
+      children:
+      [
+        SizedBox(height: 300,width: double.maxFinite, child: Image.asset("images/cake.jpg", fit: BoxFit.cover)),
+        Container
+        (
+          margin: Measures.all16,
+          child: Wrap
           (
-            margin: const EdgeInsets.only(right: 32),
-            child: Text("Berry Banana Breakfast Smoothie",style: Styles().titleBlack)
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceAround,children:
-          [
-            foodInfoIcon("time", "5 min"),
-            foodInfoIcon("healthcare", "64/100"),
-            foodInfoIcon("serving", "1 Serving"),
-            foodInfoIcon("restaurant", "Vegetarian"),
-          ]),
-          Divider(color: Styles.greyColor),
-          columnPart
-          (
-            "Summary",
+            runSpacing: 16,
+            children:
             [
-              Text("If you want to add more <b>lacto ovo vegetarian</b> recipes to your recipe box, Berry Banana Breakfast Smoothie might be a recipe you should try. One portion of this dish contains about <b>21g of protein</b>, <b>10g of fat</b>, and a total of <b>457 calories</b>. This recipe serves 1 and costs 2.07 per serving. 689 people have tried and liked this recipe. It works well as a rather inexpensive breakfast. A mixture of banana, graham cracker crumbs, vanilla yogurt, and a handful of other ingredients are all it takes to make this recipe so yummy.",style: Styles().foodPageText),
-            ]
-          ),
-          Divider(color: Styles.greyColor),
-          columnPart
-          (
-            "Ingredients",
-            [
-              ListView.separated
+              Container
               (
-                padding: Measures.horizontal0,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 7,
-                itemBuilder: (context, index) => RichText
-                (
-                  text: TextSpan
+                margin: const EdgeInsets.only(right: 32),
+                child: Text("Berry Banana Breakfast Smoothie",style: Styles().titleBlack)
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround,children:
+              [
+                foodInfoIcon("time", "5 min"),
+                foodInfoIcon("healthcare", "64/100"),
+                foodInfoIcon("serving", "1 Serving"),
+                foodInfoIcon("restaurant", "Vegetarian"),
+              ]),
+              Divider(color: Styles.greyColor),
+              columnPart
+              (
+                "Summary",
+                [
+                  Text("If you want to add more <b>lacto ovo vegetarian</b> recipes to your recipe box, Berry Banana Breakfast Smoothie might be a recipe you should try. One portion of this dish contains about <b>21g of protein</b>, <b>10g of fat</b>, and a total of <b>457 calories</b>. This recipe serves 1 and costs 2.07 per serving. 689 people have tried and liked this recipe. It works well as a rather inexpensive breakfast. A mixture of banana, graham cracker crumbs, vanilla yogurt, and a handful of other ingredients are all it takes to make this recipe so yummy.",style: Styles().foodPageText),
+                ]
+              ),
+              Divider(color: Styles.greyColor),
+              columnPart
+              (
+                "Ingredients",
+                [
+                  ListView.separated
                   (
-                    text: "\u2022  ",style: Styles().foodPageBullet,
-                    children: [TextSpan(text: "ingredient ${index+1}",style: Styles().foodPageText)]
+                    padding: Measures.horizontal0,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 7,
+                    itemBuilder: (context, index) => RichText
+                    (
+                      text: TextSpan
+                      (
+                        text: "\u2022  ",style: Styles().foodPageBullet,
+                        children: [TextSpan(text: "ingredient ${index+1}",style: Styles().foodPageText)]
+                      ),
+                    ),
+                    separatorBuilder: (context, index) => const SizedBox(height: 6),
                   ),
-                ),
-                separatorBuilder: (context, index) => const SizedBox(height: 6),
+                ]
               ),
-            ]
-          ),
-          Divider(color: Styles.greyColor),
-          columnPart
-          (
-            "Instructions",
-            [
-              ListView.separated
+              Divider(color: Styles.greyColor),
+              columnPart
               (
-                padding: Measures.horizontal0,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: instroList.length,
-                itemBuilder: (context, index) => RichText
-                (
-                  text: TextSpan
+                "Instructions",
+                [
+                  ListView.separated
                   (
-                    text: "${index+1}-) ",style: Styles().foodPageBullet,
-                    children: [TextSpan(text: instroList[index],style: Styles().foodPageText)]
+                    padding: Measures.horizontal0,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: instroList.length,
+                    itemBuilder: (context, index) => RichText
+                    (
+                      text: TextSpan
+                      (
+                        text: "${index+1}-) ",style: Styles().foodPageBullet,
+                        children: [TextSpan(text: instroList[index],style: Styles().foodPageText)]
+                      ),
+                    ),
+                    separatorBuilder: (context, index) => const SizedBox(height: 6),
                   ),
-                ),
-                separatorBuilder: (context, index) => const SizedBox(height: 6),
+                ]
               ),
-            ]
-          ),
-          Divider(color: Styles.greyColor),
-          columnPart
-          (
-            "Nutritients",
-            [
-              SizedBox
+              Divider(color: Styles.greyColor),
+              columnPart
               (
-                height: 164,
-                child: ListView.separated
-                (
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: 6,
-                  itemBuilder: (context, index) => nutritionCard(),
-                  separatorBuilder: (context, index) => const SizedBox(width: 12),
-                ),
+                "Nutritients",
+                [
+                  SizedBox
+                  (
+                    height: 164,
+                    child: ListView.separated
+                    (
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: 6,
+                      itemBuilder: (context, index) => nutritionCard(),
+                      separatorBuilder: (context, index) => const SizedBox(width: 12),
+                    ),
+                  ),
+                ]
               ),
-            ]
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_food_app/utils/providers.dart';
 import 'package:my_food_app/view/main_page.dart';
+import 'package:provider/provider.dart';
 
 void main()
 {
@@ -14,11 +16,18 @@ class MyApp extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
-    return MaterialApp
+    return MultiProvider
     (
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true),
-      home: const MainPage(),
+      providers:
+      [
+        ChangeNotifierProvider(create: (context) => AppBarProviders()),
+      ],
+      child: MaterialApp
+      (
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(useMaterial3: true),
+        home: const MainPage(),
+      ),
     );
   }
 }

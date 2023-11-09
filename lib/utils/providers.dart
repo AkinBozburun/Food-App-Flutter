@@ -9,11 +9,11 @@ class AppBarProviders extends ChangeNotifier
 
   bool isTriggered = true;
 
-  ScrollController scrollController = ScrollController();
+  late ScrollController scrollController;
 
   initscroll()
   {
-    scrollController.addListener(()=>isExpanded());
+    scrollController = ScrollController()..addListener(()=>isExpanded());
   }
 
   isExpanded()
@@ -33,7 +33,7 @@ class AppBarProviders extends ChangeNotifier
     {
       if(isTriggered == true)
       {        
-        height = 24;
+        height = 0;
         appBarColor = Colors.transparent;
         childControl = false;
         notifyListeners();
