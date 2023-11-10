@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:my_food_app/utils/local_datas.dart';
 import 'package:my_food_app/utils/measures.dart';
+import 'package:my_food_app/utils/providers.dart';
 import 'package:my_food_app/utils/styles.dart';
+import 'package:provider/provider.dart';
 
 class FilterBottomSheet extends StatelessWidget
 {
@@ -33,11 +35,11 @@ _bottomSheet(context)
         alignment: WrapAlignment.center,
         runSpacing: 12,
         children:
-        [          
+        [
           Container(height: 4,width: 36,color: Styles.darkGreyColor),
-          _gridview("Sort by", sortList, deviceWidth),
-          _gridview("Diet", dietList, deviceWidth),
-          _gridview("Cuisine", cuisinesList, deviceWidth),
+          _gridview(context,"Sort by", sortList, deviceWidth),
+          _gridview(context,"Diet", dietList, deviceWidth),
+          _gridview(context,"Cuisine", cuisinesList, deviceWidth),
           Divider(color: Styles.greyColor),
           _buttonsRow(deviceWidth),
         ],
@@ -46,8 +48,10 @@ _bottomSheet(context)
   );
 }
 
-_gridview(String title, List gridList, double width)
+_gridview(context,String title, List gridList, double width)
 {
+  final provider = Provider.of<FilterProviders>(context);
+
   return Column
   (
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,15 +70,26 @@ _gridview(String title, List gridList, double width)
           gridDelegate:  const SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           mainAxisSpacing: 6,
           crossAxisSpacing: 6,
-          itemBuilder: (context, index) => Container
+          itemBuilder: (context, index) => GestureDetector
           (
-            padding: Measures.horizontal16,
-            decoration: BoxDecoration
+            onTap: () => provider.buttonSwitch(title, index),
+            child: AnimatedContainer
             (
-              border: Border.all(color: Styles.greenColor), color: Styles.whiteColor,
-              borderRadius: Measures.border24,
+              duration: const Duration(milliseconds: 100),
+              padding: Measures.horizontal16,
+              decoration: BoxDecoration
+              (
+                color: provider.listItem(title, index) == false? Styles.whiteColor : Styles.greenColor,
+                border: Border.all(color: Styles.greenColor),
+                borderRadius: Measures.border24,
+              ),
+              child: Center(child: Text
+              (
+                gridList[index]["text"],
+                style: provider.listItem(title, index) == false?
+                Styles().bottomSheetSpeciesTextBlack : Styles().bottomSheetSpeciesTextWhite
+              )),
             ),
-            child: Center(child: Text(gridList[index]["text"],style: Styles().bottomSheetSpeciesText)),
           ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_food_app/utils/local_datas.dart';
 import 'package:my_food_app/utils/styles.dart';
 
 class AppBarProviders extends ChangeNotifier
@@ -40,5 +41,45 @@ class AppBarProviders extends ChangeNotifier
         isTriggered = !isTriggered;
       }
     }
+  }
+}
+
+class FilterProviders extends ChangeNotifier
+{
+  List<bool> sortListButton = List.generate(sortList.length, (index) => false);
+  List<bool> dietListButton = List.generate(dietList.length, (index) => false);
+  List<bool> cuisinesListButton = List.generate(cuisinesList.length, (index) => false);
+
+  listItem(listMode, index)
+  {    
+    if(listMode == "Sort by")
+    {
+      return sortListButton[index];
+    }
+    if(listMode == "Diet")
+    {
+      return dietListButton[index];
+    }
+    if(listMode == "Cuisine")
+    {
+      return cuisinesListButton[index];
+    }
+  }
+
+  buttonSwitch(listMode, index)
+  {
+    if(listMode == "Sort by")
+    {
+      sortListButton[index] = !sortListButton[index];
+    }
+    if(listMode == "Diet")
+    {
+      dietListButton[index] = !dietListButton[index];
+    }
+    if(listMode == "Cuisine")
+    {
+      cuisinesListButton[index] = !cuisinesListButton[index];
+    }
+    notifyListeners();
   }
 }
