@@ -26,10 +26,11 @@ class Styles
   
   final bottomSheetTitleWhite = GoogleFonts.poppins(fontSize: 14, color: whiteColor, fontWeight: FontWeight.w500);
   final bottomSheetTitleBlack = GoogleFonts.poppins(fontSize: 14, color: blackColor, fontWeight: FontWeight.w500);
-  final bottomSheetSpeciesText = GoogleFonts.poppins(fontSize: 12, color: blackColor, fontWeight: FontWeight.w300);
+  final bottomSheetSpeciesTextBlack = GoogleFonts.poppins(fontSize: 12, color: blackColor, fontWeight: FontWeight.w300);
+  final bottomSheetSpeciesTextWhite = GoogleFonts.poppins(fontSize: 12, color: whiteColor, fontWeight: FontWeight.w300);
 
   final foodPageText = GoogleFonts.poppins(fontSize: 12, color: blackColor, fontWeight: FontWeight.w300);
   final foodPageBullet = GoogleFonts.poppins(fontSize: 12, color: blackColor, fontWeight: FontWeight.bold);
   final foodPageSubTitle = GoogleFonts.poppins(fontSize: 16, color: blackColor, fontWeight: FontWeight.w600);
-  final calorieText = GoogleFonts.poppins(fontSize: 14, color: blackColor, fontWeight: FontWeight.w600);  
+  final calorieText = GoogleFonts.poppins(fontSize: 14, color: blackColor, fontWeight: FontWeight.w600);
 }
