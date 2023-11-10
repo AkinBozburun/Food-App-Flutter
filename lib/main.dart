@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget
       providers:
       [
         ChangeNotifierProvider(create: (context) => AppBarProviders()),
+        ChangeNotifierProvider(create: (context) => FilterProviders()),
       ],
       child: MaterialApp
       (
