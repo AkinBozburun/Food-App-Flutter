@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_food_app/utils/local_datas.dart';
 import 'package:my_food_app/utils/measures.dart';
+import 'package:my_food_app/utils/providers.dart';
 import 'package:my_food_app/utils/styles.dart';
 import 'package:my_food_app/view/food_page.dart';
 import 'package:my_food_app/view/search_page.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget
 {
@@ -91,7 +93,7 @@ class _MainPageState extends State<MainPage>
                   (
                     children:
                     [
-                      _categories(width),
+                      _categories(context, width),
                       const SizedBox(height: 24),
                       _recently(width,context),
                       const SizedBox(height: 64),
@@ -107,8 +109,10 @@ class _MainPageState extends State<MainPage>
   }
 }
 
-_categories(width)
+_categories(context,width)
 {
+  final provider = Provider.of<DataProviders>(context);
+
   return Column
   (
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,6 +136,7 @@ _categories(width)
           (
             onTap: ()
             {
+              provider.fetchData("type", categories[index]["text"]);
               Navigator.push(context, MaterialPageRoute(builder: (context) =>
               SearchPage(foodName: categories[index]["text"], deviceWidth: width)));
             },

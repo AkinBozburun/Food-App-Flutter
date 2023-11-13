@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:my_food_app/model/recipe_list_model.dart';
 import 'package:my_food_app/utils/local_datas.dart';
 import 'package:my_food_app/utils/styles.dart';
+import 'package:http/http.dart' as http;
 
 class AppBarProviders extends ChangeNotifier
 {
@@ -103,4 +106,26 @@ class FilterProviders extends ChangeNotifier
     }
     notifyListeners();
   }  
+}
+
+class DataProviders extends ChangeNotifier
+{
+  int totalResult = 0;
+  List<Results> recipeList = [];
+
+  fetchData(searchPart, result) async
+  {
+    String api = "https://api.spoonacular.com/recipes/complexSearch?$searchPart=$result&number=10";
+    var data = await http.get
+    (      
+      headers: {"x-api-key" : "b3615cad35ab43ee8a6d5892e149ff05"},
+      Uri.parse(api),
+    );
+
+    final response = Recipes.fromJson(json.decode(data.body));
+    
+    totalResult = response.totalResults;
+    recipeList = response.results;
+    notifyListeners();
+  }
 }
