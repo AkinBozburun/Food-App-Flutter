@@ -72,10 +72,7 @@ _gridview(context,String title, List gridList, double width)
           crossAxisSpacing: 6,
           itemBuilder: (context, index) => GestureDetector
           (
-            onTap: ()
-            {
-              provider.buttonSwitch(title ,gridList[index]["text"], index);
-            },
+            onTap: () => provider.buttonSwitch(title ,gridList[index]["text"], index),
             child: AnimatedContainer
             (
               duration: const Duration(milliseconds: 100),
