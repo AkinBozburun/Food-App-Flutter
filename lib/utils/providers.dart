@@ -51,7 +51,7 @@ class FilterProviders extends ChangeNotifier
 {
   List<bool> sortListButton = List.generate(sortList.length, (index) => false);
   List<bool> dietListButton = List.generate(dietList.length, (index) => false);
-  List<bool> cuisinesListButton = List.generate(cuisinesList.length, (index) => false);
+  List<bool> cuisineListButton = List.generate(cuisinesList.length, (index) => false);
 
   listItem(listMode, index)
   {    
@@ -65,13 +65,13 @@ class FilterProviders extends ChangeNotifier
     }
     if(listMode == "Cuisine")
     {
-      return cuisinesListButton[index];
+      return cuisineListButton[index];
     }
   }
 
-  buttonSwitch(listMode, index)
+  buttonSwitch(String listTitle, String dataString, int index)
   {
-    if(listMode == "Sort by")
+    if(listTitle == "Sort by")
     {
       sortListButton[index] = !sortListButton[index];
       for(var i = 0; i<sortListButton.length; i++)
@@ -81,8 +81,9 @@ class FilterProviders extends ChangeNotifier
           sortListButton[i] = false;
         }
       }
+      selectedSort = sortListButton[index] == true? dataString : "";
     }
-    if(listMode == "Diet")
+    if(listTitle == "Diet")
     {
       dietListButton[index] = !dietListButton[index];
       for(var i = 0; i<dietListButton.length; i++)
@@ -92,40 +93,98 @@ class FilterProviders extends ChangeNotifier
           dietListButton[i] = false;
         }
       }
+      selectedDiet = dietListButton[index] == true? dataString : "";
     }
-    if(listMode == "Cuisine")
+    if(listTitle == "Cuisine")
     {
-      cuisinesListButton[index] = !cuisinesListButton[index];
-      for(var i = 0; i<cuisinesListButton.length; i++)
+      cuisineListButton[index] = !cuisineListButton[index];
+      for(var i = 0; i<cuisineListButton.length; i++)
       {
         if(index != i)
         {
-          cuisinesListButton[i] = false;
+          cuisineListButton[i] = false;
         }
+      }
+      selectedCuisine = cuisineListButton[index] == true? dataString : "";
+    }
+    notifyListeners();
+  }
+
+  clearAllButtons()
+  {
+    for(var i = 0; i<7; i++)
+    {
+      if(sortListButton.contains(true))
+      {
+        sortListButton[i] = false;
+      }
+      if(dietListButton.contains(true))
+      {
+        dietListButton[i] = false;
+      }
+      if(cuisineListButton.contains(true))
+      {
+        cuisineListButton[i] = false;
       }
     }
     notifyListeners();
-  }  
+    clearSelects();
+    
+  }
+
+  clearSelects()
+  {
+    selectedSort = "";
+    selectedDiet = "";
+    selectedCuisine = "";
+  }
 }
+
+String? selectedType;
+String selectedSort = "";
+String selectedDiet = "";
+String selectedCuisine = "";
 
 class DataProviders extends ChangeNotifier
 {
   int totalResult = 0;
   List<Results> recipeList = [];
 
-  fetchData(searchPart, result) async
+  fetchData(String? type, String? sort, String? diet, String? cuisine) async
   {
-    String api = "https://api.spoonacular.com/recipes/complexSearch?$searchPart=$result&number=10";
-    var data = await http.get
+    selectedType = type;
+
+    String? typeText = type != null? "type=$type" : null;
+    String? sortText = sort != null? "sort=$sort" : null;
+    String? dietText = diet != null? "diet=$diet" : null;
+    String? cuisineText = cuisine != null? "cuisine=$cuisine" : null;
+
+    String api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$sortText&$dietText&$cuisineText&number=32";
+    final data = await http.get
     (      
       headers: {"x-api-key" : "b3615cad35ab43ee8a6d5892e149ff05"},
       Uri.parse(api),
     );
 
     final response = Recipes.fromJson(json.decode(data.body));
-    
+
     totalResult = response.totalResults;
     recipeList = response.results;
     notifyListeners();
+  }
+
+  showSelectedItems()
+  {
+    return
+    [
+      selectedSort != ""? "$selectedSort," : "",
+      selectedDiet != ""? "$selectedDiet," : "",
+      selectedCuisine != ""? "$selectedCuisine," : "",
+    ];
+  }
+
+  gatherSelectedItems()
+  {
+    fetchData(selectedType, selectedSort, selectedDiet, selectedCuisine);
   }
 }

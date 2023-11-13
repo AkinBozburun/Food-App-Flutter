@@ -41,7 +41,7 @@ _bottomSheet(context)
           _gridview(context,"Diet", dietList, deviceWidth),
           _gridview(context,"Cuisine", cuisinesList, deviceWidth),
           Divider(color: Styles.greyColor),
-          _buttonsRow(deviceWidth),
+          _buttonsRow(context, deviceWidth),
         ],
       ),
     ),
@@ -72,7 +72,10 @@ _gridview(context,String title, List gridList, double width)
           crossAxisSpacing: 6,
           itemBuilder: (context, index) => GestureDetector
           (
-            onTap: () => provider.buttonSwitch(title, index),
+            onTap: ()
+            {
+              provider.buttonSwitch(title ,gridList[index]["text"], index);
+            },
             child: AnimatedContainer
             (
               duration: const Duration(milliseconds: 100),
@@ -97,7 +100,7 @@ _gridview(context,String title, List gridList, double width)
   );
 }
 
-_buttonsRow(width)
+_buttonsRow(context, width)
 {
   button(Text txt, Color clr, tap) => InkWell
   (
@@ -116,13 +119,22 @@ _buttonsRow(width)
     ),
   );
 
+  final dataProv = Provider.of<DataProviders>(context);
+  final filterProv = Provider.of<FilterProviders>(context);
+
   return Row
   (
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children:
     [
-      button(Text("Clear All",style: Styles().bottomSheetTitleBlack,), Styles.greyColor, ()=> print("temizle")),
-      button(Text("Show Results",style: Styles().bottomSheetTitleWhite), Styles.greenColor ,()=> print("sonuçlar")),
+      button(Text("Clear All",style: Styles().bottomSheetTitleBlack),
+      Styles.greyColor, ()=> filterProv.clearAllButtons()),
+      button(Text("Show Results",style: Styles().bottomSheetTitleWhite),
+      Styles.greenColor ,()
+      {
+        dataProv.gatherSelectedItems();
+        Navigator.pop(context);
+      }),
     ],
   );
 }

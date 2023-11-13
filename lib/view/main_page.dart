@@ -136,7 +136,7 @@ _categories(context,width)
           (
             onTap: ()
             {
-              provider.fetchData("type", categories[index]["text"]);
+              provider.fetchData(categories[index]["text"],null,null,null);
               Navigator.push(context, MaterialPageRoute(builder: (context) =>
               SearchPage(foodName: categories[index]["text"], deviceWidth: width)));
             },

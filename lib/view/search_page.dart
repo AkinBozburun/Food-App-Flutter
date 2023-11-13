@@ -29,15 +29,16 @@ _appbar(foodName,context)
 
   return AppBar
   (
-    toolbarHeight: 72,
+    toolbarHeight: 76,
     backgroundColor: Styles.greenColor,
     elevation: 2,
     leading: IconButton(onPressed: ()=> Navigator.pop(context),
     icon: Icon(Icons.keyboard_arrow_left_rounded, size: 36, color: Styles.whiteColor)),
     title: ListTile
-    (          
+    (
       title: Text(foodName,style: Styles().titleWhite),
-      subtitle: Text("${provider.totalResult} Recipes, Vegetarian",style: Styles().foodListSubTitle),
+      subtitle: Text("${provider.showSelectedItems()[0]} ${provider.showSelectedItems()[1]} ${provider.showSelectedItems()[2]} ${provider.totalResult} Recipe",
+      maxLines: 2, style: Styles().foodListSubTitle),
     ),
     actions: const [FilterBottomSheet()],
   );
@@ -53,7 +54,7 @@ _foodList(context, width)
     itemCount: provider.recipeList.length,
     itemBuilder: (context, index) => InkWell
     (      
-      onTap: (){},
+      onTap: (){print(provider.recipeList[index].id);},
       borderRadius: Measures.border12,
       child: Ink(width: width,child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:
       [

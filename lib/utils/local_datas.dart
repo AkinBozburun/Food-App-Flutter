@@ -6,64 +6,51 @@ List categories =
   {
     "icon" : "images/breakfast.png",
     "text" : "Breakfasts",
-    "api" : "type=breakfast",
   },
   {
     "icon" : "images/main.png",
     "text" : "Main Courses",
-    "api" : "type=main course",
   },
   {
     "icon" : "images/soup.png",
     "text" : "Soups",
-    "api" : "type=soup",
   },
   {
     "icon" : "images/dessert.png",
     "text" : "Desserts",
-    "api" : "type=dessert",
   },
   {
     "icon" : "images/appetizer.png",
     "text" : "Appetizers",
-    "api" : "type=appetizer",
   },
   {
     "icon" : "images/salad.png",
     "text" : "Salads",
-    "api" : "type=salad",
   },
 ];
 
 List sortList =
 [
   {
-    "text" : "Popularity",
-    "api" : "sort=Popularity",
+    "text" : "Popularity"
   },
   {
-    "text" : "Time",
-    "api" : "sort=Time",
+    "text" : "Time"
   },
   {
-    "text" : "Price",
-    "api" : "sort=Price",
+    "text" : "Price"
   },
   {
-    "text" : "Healthiness",
-    "api" : "sort=Healthiness",
+    "text" : "Healthiness"
   },
   {
-    "text" : "Calories",
-    "api" : "sort=Calories",
+    "text" : "Calories"
   },
   {
-    "text" : "Protein",
-    "api" : "sort=Protein",
+    "text" : "Protein"
   },
   {
-    "text" : "Carbohydrates",
-    "api" : "sort=Carbohydrates",
+    "text" : "Carbohydrates"
   },
 ];
 
@@ -71,27 +58,21 @@ List dietList =
 [
   {
     "text" : "Vegetarian",
-    "api" : "diet=Vegetarian",
   },
   {
     "text" : "Gluten Free",
-    "api" : "diet=Gluten Free",
   },
   {
     "text" : "Vegan",
-    "api" : "diet=Vegan",
   },
   {
     "text" : "Pescetarian",
-    "api" : "diet=Pescetarian",
   },
   {
     "text" : "Ketogenic",
-    "api" : "diet=Ketogenic",
   },
   {
     "text" : "Paleo",
-    "api" : "diet=Paleo",
   },
 ];
 
@@ -99,31 +80,24 @@ List cuisinesList =
 [
   {
     "text" : "Asian",
-    "api" : "cuisine=Asian",
   },
   {
     "text" : "American",
-    "api" : "cuisine=American",
   },
   {
     "text" : "Mexican",
-    "api" : "cuisine=Mexican",
   },
   {
     "text" : "European",
-    "api" : "cuisine=European",
   },
   {
     "text" : "İtalian",
-    "api" : "cuisine=İtalian",
   },
   {
     "text" : "Nordic",
-    "api" : "cuisine=Nordic",
   },
   {
     "text" : "Mediterranean",
-    "api" : "cuisine=Mediterranean",
   },
 ];
 
