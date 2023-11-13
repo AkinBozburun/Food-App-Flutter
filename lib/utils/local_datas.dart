@@ -91,7 +91,7 @@ List cuisinesList =
     "text" : "European",
   },
   {
-    "text" : "İtalian",
+    "text" : "Italian",
   },
   {
     "text" : "Nordic",

@@ -111,7 +111,8 @@ class _MainPageState extends State<MainPage>
 
 _categories(context,width)
 {
-  final provider = Provider.of<DataProviders>(context);
+  final dataProv = Provider.of<DataProviders>(context);
+  final filterProv = Provider.of<FilterProviders>(context);
 
   return Column
   (
@@ -136,7 +137,8 @@ _categories(context,width)
           (
             onTap: ()
             {
-              provider.fetchData(categories[index]["text"],null,null,null);
+              filterProv.clearAllButtons();
+              dataProv.fetchData(categories[index]["text"],null,null,null);
               Navigator.push(context, MaterialPageRoute(builder: (context) =>
               SearchPage(foodName: categories[index]["text"], deviceWidth: width)));
             },
