@@ -71,15 +71,36 @@ class FilterProviders extends ChangeNotifier
     if(listMode == "Sort by")
     {
       sortListButton[index] = !sortListButton[index];
+      for(var i = 0; i<sortListButton.length; i++)
+      {
+        if(index != i)
+        {
+          sortListButton[i] = false;
+        }
+      }
     }
     if(listMode == "Diet")
     {
       dietListButton[index] = !dietListButton[index];
+      for(var i = 0; i<dietListButton.length; i++)
+      {
+        if(index != i)
+        {
+          dietListButton[i] = false;
+        }
+      }
     }
     if(listMode == "Cuisine")
     {
       cuisinesListButton[index] = !cuisinesListButton[index];
+      for(var i = 0; i<cuisinesListButton.length; i++)
+      {
+        if(index != i)
+        {
+          cuisinesListButton[i] = false;
+        }
+      }
     }
     notifyListeners();
-  }
+  }  
 }
