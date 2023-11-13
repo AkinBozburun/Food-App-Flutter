@@ -50,7 +50,7 @@ List sortList =
     "text" : "Healthiness",
   },
   {
-    "text" : "Calorie",
+    "text" : "Calories",
   },
   {
     "text" : "Protein",
