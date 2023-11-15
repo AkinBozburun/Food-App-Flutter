@@ -37,8 +37,11 @@ _appbar(foodName,context)
     title: ListTile
     (
       title: Text(foodName,style: Styles().titleWhite),
-      subtitle: Text("${provider.showSelectedItems()[0]} ${provider.showSelectedItems()[1]} ${provider.showSelectedItems()[2]} ${provider.totalResult} Recipe",
-      maxLines: 2, style: Styles().foodListSubTitle),
+      subtitle: Text
+      (
+        "${provider.showSelectedItems()[0]} ${provider.showSelectedItems()[1]} ${provider.showSelectedItems()[2]} ${provider.totalResult} Recipe",
+        maxLines: 2, style: Styles().foodListSubTitle
+      ),
     ),
     actions: const [FilterBottomSheet()],
   );
@@ -53,7 +56,7 @@ _foodList(context, width)
     padding: const EdgeInsets.all(16),
     itemCount: provider.recipeList.length,
     itemBuilder: (context, index) => InkWell
-    (      
+    (
       onTap: (){print(provider.recipeList[index].id);},
       borderRadius: Measures.border12,
       child: Ink(width: width,child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:
@@ -65,8 +68,17 @@ _foodList(context, width)
         ),
         SizedBox
         (
-          width: 240,
-          child: Text(provider.recipeList[index].title,maxLines: 3,style: Styles().foodListText),
+          width: width*0.65,
+          child: ListTile
+          (
+            title: Text(provider.recipeList[index].title, style: Styles().foodListText),
+            subtitle: provider.recipeList[index].nutrition == null ? const Center() : 
+             Text
+             (
+              "${provider.recipeList[index].nutrition!.nutrients[0].name} : ${provider.recipeList[index].nutrition!.nutrients[0].amount.toInt()} g",
+              style: Styles().foodListSubText
+             ),
+          )
         ),
         Icon(Icons.keyboard_arrow_right_rounded,color: Styles.blackColor, size: 26),
       ])),

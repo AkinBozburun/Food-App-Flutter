@@ -17,12 +17,13 @@ class Styles
 
   final categorieText = GoogleFonts.poppins(fontSize: 12, color: blackColor, fontWeight: FontWeight.w400);
 
-  final recentlyTxt1 = GoogleFonts.poppins(fontSize: 12, color: blackColor, fontWeight: FontWeight.w500);
+  final recentlyText1 = GoogleFonts.poppins(fontSize: 12, color: blackColor, fontWeight: FontWeight.w500);
   final recentlyText2 = GoogleFonts.poppins(fontSize: 10, color: blackColor, fontWeight: FontWeight.w300);
   final recentlyText3 = GoogleFonts.poppins(fontSize: 12, color: blackColor, fontWeight: FontWeight.w600);
 
   final foodListSubTitle = GoogleFonts.poppins(fontSize: 14, color: whiteColor, fontWeight: FontWeight.w400);
   final foodListText = GoogleFonts.poppins(fontSize: 14, color: blackColor, fontWeight: FontWeight.w400);
+  final foodListSubText = GoogleFonts.poppins(fontSize: 12, color: blackColor, fontWeight: FontWeight.w300);
   
   final bottomSheetTitleWhite = GoogleFonts.poppins(fontSize: 14, color: whiteColor, fontWeight: FontWeight.w500);
   final bottomSheetTitleBlack = GoogleFonts.poppins(fontSize: 14, color: blackColor, fontWeight: FontWeight.w500);

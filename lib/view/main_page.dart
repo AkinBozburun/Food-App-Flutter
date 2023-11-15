@@ -214,7 +214,7 @@ _recently(width,context)
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
                       [
-                        Text("Super Delicious Cake",style: Styles().recentlyTxt1),
+                        Text("Super Delicious Cake",style: Styles().recentlyText1),
                         const SizedBox(height: 6),
                         Row(children:
                         [
