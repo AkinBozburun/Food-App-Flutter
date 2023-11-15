@@ -1,12 +1,15 @@
 class Recipes
 {
   Recipes({required this.results, required this.totalResults});
+  
   late final List<Results> results;
+  late final int offset;
   late final int totalResults;
   
   Recipes.fromJson(Map<String, dynamic> json)
   {
     results = List.from(json['results']).map((e)=>Results.fromJson(e)).toList();
+    offset = json['offset'];
     totalResults = json['totalResults'];
   }
 }

@@ -147,8 +147,11 @@ String selectedCuisine = "";
 
 class DataProviders extends ChangeNotifier
 {
+  int offset = 0;
   int totalResult = 0;
   List<Results> recipeList = [];
+
+  late var response;
 
   fetchData(String? type, String? sort, String? diet, String? cuisine) async
   {
@@ -159,18 +162,25 @@ class DataProviders extends ChangeNotifier
     String? dietText = diet != null? "diet=$diet" : null;
     String? cuisineText = cuisine != null? "cuisine=$cuisine" : null;
 
-    String api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$sortText&$dietText&$cuisineText&number=32";
+    String api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$sortText&$dietText&$cuisineText&number=32&offset=$offset";
     final data = await http.get
     (      
       headers: {"x-api-key" : "b3615cad35ab43ee8a6d5892e149ff05"},
       Uri.parse(api),
     );
 
-    final response = Recipes.fromJson(json.decode(data.body));
+    response = Recipes.fromJson(json.decode(data.body));
 
     totalResult = response.totalResults;
     recipeList = response.results;
     notifyListeners();
+  }
+
+  addList()
+  {
+    offset = recipeList.length;
+    recipeList.addAll(response.result);
+    notifyListeners();   
   }
 
   showSelectedItems()

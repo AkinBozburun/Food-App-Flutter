@@ -5,7 +5,7 @@ import 'package:my_food_app/utils/styles.dart';
 import 'package:my_food_app/view/filter_bottomsheet.dart';
 import 'package:provider/provider.dart';
 
-class SearchPage extends StatelessWidget
+class SearchPage extends StatefulWidget
 {
   final String foodName;
   final double deviceWidth;
@@ -13,12 +13,33 @@ class SearchPage extends StatelessWidget
   const SearchPage({super.key, required this.foodName, required this.deviceWidth});
 
   @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage>
+{
+  final controller = ScrollController();
+
+  @override
+  void initState()
+  {
+    controller.addListener(()
+    {
+      if(controller.position.maxScrollExtent == controller.offset)
+      {
+        print("son");
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context)
   {
     return Scaffold
     (
-      appBar: _appbar(foodName, context),
-      body: _foodList(context, deviceWidth)
+      appBar: _appbar(widget.foodName, context),
+      body: _foodList(context, widget.deviceWidth, controller)
     );
   }
 }
@@ -47,12 +68,13 @@ _appbar(foodName,context)
   );
 }
 
-_foodList(context, width)
+_foodList(context, width, controller)
 {
   final provider = Provider.of<DataProviders>(context);
 
   return ListView.separated
   (
+    controller: controller,
     padding: const EdgeInsets.all(16),
     itemCount: provider.recipeList.length,
     itemBuilder: (context, index) => InkWell
@@ -73,11 +95,11 @@ _foodList(context, width)
           (
             title: Text(provider.recipeList[index].title, style: Styles().foodListText),
             subtitle: provider.recipeList[index].nutrition == null ? const Center() : 
-             Text
-             (
-              "${provider.recipeList[index].nutrition!.nutrients[0].name} : ${provider.recipeList[index].nutrition!.nutrients[0].amount.toInt()} g",
-              style: Styles().foodListSubText
-             ),
+            Text
+            (
+             "${provider.recipeList[index].nutrition!.nutrients[0].name} : ${provider.recipeList[index].nutrition!.nutrients[0].amount.toInt()} g",
+             style: Styles().foodListSubText
+            ),
           )
         ),
         Icon(Icons.keyboard_arrow_right_rounded,color: Styles.blackColor, size: 26),
