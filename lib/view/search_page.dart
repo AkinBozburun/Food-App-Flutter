@@ -23,12 +23,14 @@ class _SearchPageState extends State<SearchPage>
   @override
   void initState()
   {
+    final provider = Provider.of<DataProviders>(context,listen: false);
+    
     controller.addListener(()
     {
       if(controller.position.maxScrollExtent == controller.offset)
       {
-        Provider.of<DataProviders>(context,listen: false).extendList();
-      }
+        provider.extendList();
+      }      
     });
     super.initState();
   }
@@ -40,31 +42,21 @@ class _SearchPageState extends State<SearchPage>
     (
       appBar: _appbar(widget.foodName, context),
       body: _foodList(context, widget.deviceWidth, controller),
-      floatingActionButton: _fab(controller),
+      floatingActionButton: _fab(controller, context),
       bottomNavigationBar: _bottomBar(context)
     );
   }
 }
 
-_fab(controller)
-{
-    return Visibility
-    (
-      visible: controller.hasClients && controller.offset > 128 ? true : false,
-      child: FloatingActionButton.small
-      (
-        onPressed: ()
-        {
-          controller.animateTo
-          (
-            0.0.toDouble(), duration: const Duration(milliseconds: 500), curve: Curves.easeIn,
-          );
-        },
-        backgroundColor: Styles.greenColor,
-        child: Icon(Icons.arrow_upward,color: Styles.whiteColor),
-      ),
-    );
-}
+_fab(controller, context) => FloatingActionButton.small
+(
+  onPressed: () => controller.animateTo
+  (
+    0.0.toDouble(), duration: const Duration(milliseconds: 500), curve: Curves.easeIn,
+  ),
+  backgroundColor: Styles.greenColor,
+  child: Icon(Icons.arrow_upward,color: Styles.whiteColor),
+);
 
 _appbar(foodName,context)
 {
@@ -80,7 +72,8 @@ _appbar(foodName,context)
     title: ListTile
     (
       title: Text(foodName,style: Styles().titleWhite),
-      subtitle: Text
+      subtitle: provider.showSelectedItems()[0] == "" && provider.showSelectedItems()[1] == "" && provider.showSelectedItems()[2] == "" ? 
+      null : Text
       (
         "${provider.showSelectedItems()[0]} ${provider.showSelectedItems()[1]} ${provider.showSelectedItems()[2]}",
         maxLines: 2, style: Styles().foodListSubTitle
@@ -116,10 +109,10 @@ _foodList(context, width, controller)
           child: ListTile
           (
             title: Text(provider.recipeList[index].title, style: Styles().foodListText),
-            subtitle: provider.recipeList[index].nutrition == null ? const Center() : 
+            subtitle: provider.recipeList[index].nutrition == null ? null : 
             Text
             (
-             "${provider.recipeList[index].nutrition!.nutrients[0].name} : ${provider.recipeList[index].nutrition!.nutrients[0].amount.toInt()} g",
+             "${provider.recipeList[index].nutrition!.nutrients[0].name} : ${provider.recipeList[index].nutrition!.nutrients[0].amount.toInt()} ${provider.recipeList[index].nutrition!.nutrients[0].unit}",
              style: Styles().foodListSubText
             ),
           )

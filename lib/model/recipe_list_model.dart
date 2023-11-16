@@ -50,10 +50,12 @@ class Nutrients
   
   late final String name;
   late final double amount;
+  late final String unit;
   
   Nutrients.fromJson(Map<String, dynamic> json)
   {
     name = json['name'];
     amount = json['amount'];
+    unit = json['unit'];
   }
 }

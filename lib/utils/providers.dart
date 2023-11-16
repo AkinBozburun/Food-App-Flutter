@@ -187,11 +187,10 @@ class DataProviders extends ChangeNotifier
 
   showSelectedItems()
   {
-    return
-    [
-      selectedSort != ""? "$selectedSort," : "",
-      selectedDiet != ""? "$selectedDiet," : "",
-      selectedCuisine != ""? "$selectedCuisine," : "",
+    return [
+      selectedSort != ""? selectedSort : "",
+      selectedDiet != ""? selectedDiet : "",
+      selectedCuisine != ""? selectedCuisine : "",
     ];
   }
 
