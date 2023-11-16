@@ -48,16 +48,6 @@ class _SearchPageState extends State<SearchPage>
   }
 }
 
-_fab(controller, context) => FloatingActionButton.small
-(
-  onPressed: () => controller.animateTo
-  (
-    0.0.toDouble(), duration: const Duration(milliseconds: 500), curve: Curves.easeIn,
-  ),
-  backgroundColor: Styles.greenColor,
-  child: Icon(Icons.arrow_upward,color: Styles.whiteColor),
-);
-
 _appbar(foodName,context)
 {
   final provider = Provider.of<DataProviders>(context);
@@ -82,6 +72,16 @@ _appbar(foodName,context)
     actions: const [FilterBottomSheet()],
   );
 }
+
+_fab(controller, context) => FloatingActionButton.small
+(
+  onPressed: () => controller.animateTo
+  (
+    0.0.toDouble(), duration: const Duration(milliseconds: 500), curve: Curves.easeIn,
+  ),
+  backgroundColor: Styles.greenColor,
+  child: Icon(Icons.arrow_upward,color: Styles.whiteColor),
+);
 
 _foodList(context, width, controller)
 {
