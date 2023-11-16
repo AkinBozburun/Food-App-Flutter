@@ -27,7 +27,7 @@ class _SearchPageState extends State<SearchPage>
     {
       if(controller.position.maxScrollExtent == controller.offset)
       {
-        print("son");
+        Provider.of<DataProviders>(context,listen: false).extendList();
       }
     });
     super.initState();
@@ -39,9 +39,31 @@ class _SearchPageState extends State<SearchPage>
     return Scaffold
     (
       appBar: _appbar(widget.foodName, context),
-      body: _foodList(context, widget.deviceWidth, controller)
+      body: _foodList(context, widget.deviceWidth, controller),
+      floatingActionButton: _fab(controller),
+      bottomNavigationBar: _bottomBar(context)
     );
   }
+}
+
+_fab(controller)
+{
+    return Visibility
+    (
+      visible: controller.hasClients && controller.offset > 128 ? true : false,
+      child: FloatingActionButton.small
+      (
+        onPressed: ()
+        {
+          controller.animateTo
+          (
+            0.0.toDouble(), duration: const Duration(milliseconds: 500), curve: Curves.easeIn,
+          );
+        },
+        backgroundColor: Styles.greenColor,
+        child: Icon(Icons.arrow_upward,color: Styles.whiteColor),
+      ),
+    );
 }
 
 _appbar(foodName,context)
@@ -50,7 +72,7 @@ _appbar(foodName,context)
 
   return AppBar
   (
-    toolbarHeight: 76,
+    toolbarHeight: 64,
     backgroundColor: Styles.greenColor,
     elevation: 2,
     leading: IconButton(onPressed: ()=> Navigator.pop(context),
@@ -60,7 +82,7 @@ _appbar(foodName,context)
       title: Text(foodName,style: Styles().titleWhite),
       subtitle: Text
       (
-        "${provider.showSelectedItems()[0]} ${provider.showSelectedItems()[1]} ${provider.showSelectedItems()[2]} ${provider.totalResult} Recipe",
+        "${provider.showSelectedItems()[0]} ${provider.showSelectedItems()[1]} ${provider.showSelectedItems()[2]}",
         maxLines: 2, style: Styles().foodListSubTitle
       ),
     ),
@@ -72,7 +94,7 @@ _foodList(context, width, controller)
 {
   final provider = Provider.of<DataProviders>(context);
 
-  return ListView.separated
+  return provider.recipeList !=[] ? ListView.separated
   (
     controller: controller,
     padding: const EdgeInsets.all(16),
@@ -106,5 +128,24 @@ _foodList(context, width, controller)
       ])),
     ),
     separatorBuilder: (context, index) => Divider(height: 24, color: Styles.greyColor),
+  ) : Center(child: CircularProgressIndicator(color: Styles.greenColor));
+}
+
+_bottomBar(context)
+{
+  final provider = Provider.of<DataProviders>(context);
+
+  return Container
+  (
+    height: 42,
+    decoration: BoxDecoration
+    (
+      color: Styles.whiteColor,
+      boxShadow:
+      [
+        BoxShadow(blurRadius: 6,spreadRadius: 1,color: Styles.darkGreyColor)
+      ],
+    ),
+    child: Center(child: Text("${provider.recipeList.length} of ${provider.totalResult} Recipe",style: Styles().foodListSubText)),
   );
 }

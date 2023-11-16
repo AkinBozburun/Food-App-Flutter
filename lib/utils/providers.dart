@@ -172,15 +172,17 @@ class DataProviders extends ChangeNotifier
     response = Recipes.fromJson(json.decode(data.body));
 
     totalResult = response.totalResults;
-    recipeList = response.results;
+    recipeList = [];
+    recipeList.addAll(response.results);
     notifyListeners();
   }
 
-  addList()
+  extendList()
   {
-    offset = recipeList.length;
-    recipeList.addAll(response.result);
-    notifyListeners();   
+    offset = recipeList.length;    
+    recipeList.addAll(response.results);
+    notifyListeners();
+    print(recipeList.length);
   }
 
   showSelectedItems()
