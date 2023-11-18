@@ -147,6 +147,8 @@ String selectedCuisine = "";
 
 class DataProviders extends ChangeNotifier
 {
+  bool isGrid = false;
+
   int offset = 0;
   int totalResult = 0;
   List<Results> recipeList = [];
@@ -197,5 +199,11 @@ class DataProviders extends ChangeNotifier
   gatherSelectedItems()
   {
     fetchData(selectedType, selectedSort, selectedDiet, selectedCuisine);
+  }
+
+  listOrGrid()
+  {
+    isGrid = !isGrid;
+    notifyListeners();
   }
 }

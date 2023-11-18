@@ -3,6 +3,7 @@ import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/providers.dart';
 import 'package:my_food_app/utils/styles.dart';
 import 'package:my_food_app/view/filter_bottomsheet.dart';
+import 'package:my_food_app/view/food_page.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget
@@ -42,7 +43,6 @@ class _SearchPageState extends State<SearchPage>
     (
       appBar: _appbar(widget.foodName, context),
       body: _foodList(context, widget.deviceWidth, controller),
-      floatingActionButton: _fab(controller, context),
       bottomNavigationBar: _bottomBar(context)
     );
   }
@@ -69,59 +69,112 @@ _appbar(foodName,context)
         maxLines: 2, style: Styles().foodListSubTitle
       ),
     ),
-    actions: const [FilterBottomSheet()],
+    actions:
+    [
+      const FilterBottomSheet(),
+      IconButton
+      (
+        onPressed: ()=> provider.listOrGrid(),
+        icon: Icon(provider.isGrid == false? Icons.list_outlined : Icons.grid_on, color: Styles.whiteColor),
+      )
+    ],
   );
 }
-
-_fab(controller, context) => FloatingActionButton.small
-(
-  onPressed: () => controller.animateTo
-  (
-    0.0.toDouble(), duration: const Duration(milliseconds: 500), curve: Curves.easeIn,
-  ),
-  backgroundColor: Styles.greenColor,
-  child: Icon(Icons.arrow_upward,color: Styles.whiteColor),
-);
 
 _foodList(context, width, controller)
 {
   final provider = Provider.of<DataProviders>(context);
 
-  return provider.recipeList !=[] ? ListView.separated
-  (
-    controller: controller,
-    padding: const EdgeInsets.all(16),
-    itemCount: provider.recipeList.length,
-    itemBuilder: (context, index) => InkWell
+  if(provider.recipeList !=[])
+  {
+    return provider.isGrid == false ?
+    ListView.separated
     (
-      onTap: (){print(provider.recipeList[index].id);},
-      borderRadius: Measures.border12,
-      child: Ink(width: width,child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:
-      [
-        ClipRRect
-        (
-          borderRadius: Measures.border12,
-          child: Image.network(provider.recipeList[index].image,width: 82, height: 82, fit: BoxFit.cover),
-        ),
-        SizedBox
-        (
-          width: width*0.65,
-          child: ListTile
+      controller: controller,
+      padding: const EdgeInsets.all(16),
+      itemCount: provider.recipeList.length,
+      itemBuilder: (context, index) => InkWell
+      (
+        onTap: (){print(provider.recipeList[index].id);},
+        borderRadius: Measures.border12,
+        child: Ink(width: width,child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:
+        [
+          ClipRRect
           (
-            title: Text(provider.recipeList[index].title, style: Styles().foodListText),
-            subtitle: provider.recipeList[index].nutrition == null ? null : 
-            Text
+            borderRadius: Measures.border12,
+            child: Image.network(provider.recipeList[index].image,width: 82, height: 82, fit: BoxFit.cover),
+          ),
+          SizedBox
+          (
+            width: width*0.65,
+            child: ListTile
             (
-             "${provider.recipeList[index].nutrition!.nutrients[0].name} : ${provider.recipeList[index].nutrition!.nutrients[0].amount.toInt()} ${provider.recipeList[index].nutrition!.nutrients[0].unit}",
-             style: Styles().foodListSubText
-            ),
-          )
+              title: Text(provider.recipeList[index].title, style: Styles().foodListText),
+              subtitle: provider.recipeList[index].nutrition == null ? null : 
+              Text
+              (
+               "${provider.recipeList[index].nutrition!.nutrients[0].name} : ${provider.recipeList[index].nutrition!.nutrients[0].amount.toInt()} ${provider.recipeList[index].nutrition!.nutrients[0].unit}",
+               style: Styles().foodListSubText
+              ),
+            )
+          ),
+          Icon(Icons.keyboard_arrow_right_rounded,color: Styles.blackColor, size: 26),
+        ])),
+      ),
+      separatorBuilder: (context, index) => Divider(height: 24, color: Styles.greyColor))
+    : GridView.builder
+    (
+      padding: Measures.all16,
+      itemCount: provider.recipeList.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount
+      (
+        crossAxisCount: 2,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
+        childAspectRatio: 80/100
+      ),
+      itemBuilder: (context, index) => GestureDetector
+      (
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FoodPage())),
+        child: Container
+        (
+          decoration: BoxDecoration
+          (
+            color: Styles.greyColor,
+            borderRadius: Measures.border16
+          ),
+          child: Column
+          (
+            children:
+            [
+              ClipRRect
+              (
+                borderRadius: BorderRadius.only(topLeft: Measures.radius16,topRight: Measures.radius16),
+                child: Image.network(provider.recipeList[index].image, fit: BoxFit.cover),
+              ),
+              ListTile
+              (
+                title: Text
+                (
+                  provider.recipeList[index].title, style: Styles().foodListText,
+                  maxLines: provider.recipeList[index].nutrition == null ? 3 : 2, overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: provider.recipeList[index].nutrition == null ? null : Text
+                (
+                  "${provider.recipeList[index].nutrition!.nutrients[0].name} : ${provider.recipeList[index].nutrition!.nutrients[0].amount.toInt()} ${provider.recipeList[index].nutrition!.nutrients[0].unit}",
+                  style: Styles().foodListSubText
+                ),
+              ),
+            ],
+          ),
         ),
-        Icon(Icons.keyboard_arrow_right_rounded,color: Styles.blackColor, size: 26),
-      ])),
-    ),
-    separatorBuilder: (context, index) => Divider(height: 24, color: Styles.greyColor),
-  ) : Center(child: CircularProgressIndicator(color: Styles.greenColor));
+      ),
+    );
+  }
+  else
+  {
+    return Center(child: CircularProgressIndicator(color: Styles.greenColor));
+  }
 }
 
 _bottomBar(context)
