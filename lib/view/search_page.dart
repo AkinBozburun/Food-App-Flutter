@@ -124,6 +124,7 @@ _foodList(context, width, controller)
       separatorBuilder: (context, index) => Divider(height: 24, color: Styles.greyColor))
     : GridView.builder
     (
+      controller: controller,
       padding: Measures.all16,
       itemCount: provider.recipeList.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount

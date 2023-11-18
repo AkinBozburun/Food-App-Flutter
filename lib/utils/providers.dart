@@ -184,7 +184,7 @@ class DataProviders extends ChangeNotifier
     offset = recipeList.length;    
     recipeList.addAll(response.results);
     notifyListeners();
-    print(recipeList.length);
+    print(offset);
   }
 
   showSelectedItems()
