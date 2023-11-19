@@ -11,7 +11,7 @@ class AppBarProviders extends ChangeNotifier
   Color appBarColor = Colors.transparent;
   bool childControl = false;
 
-  bool isTriggered = true;
+  bool isTriggered = false;
 
   late ScrollController scrollController;
 
@@ -141,6 +141,7 @@ class FilterProviders extends ChangeNotifier
 }
 
 String? selectedType;
+String? selectedQuery;
 String selectedSort = "";
 String selectedDiet = "";
 String selectedCuisine = "";
@@ -155,16 +156,17 @@ class DataProviders extends ChangeNotifier
 
   late var response;
 
-  fetchData(String? type, String? sort, String? diet, String? cuisine) async
+  fetchData(String? type, String? query, String? sort, String? diet, String? cuisine) async
   {
     selectedType = type;
 
     String? typeText = type != null? "type=$type" : null;
+    String? queryText = type != null? "type=$query" : null;
     String? sortText = sort != null? "sort=$sort" : null;
     String? dietText = diet != null? "diet=$diet" : null;
     String? cuisineText = cuisine != null? "cuisine=$cuisine" : null;
 
-    String api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$sortText&$dietText&$cuisineText&number=32&offset=$offset";
+    String api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$queryText&$sortText&$dietText&$cuisineText&number=32&offset=$offset";
     final data = await http.get
     (      
       headers: {"x-api-key" : "b3615cad35ab43ee8a6d5892e149ff05"},
@@ -198,7 +200,7 @@ class DataProviders extends ChangeNotifier
 
   gatherSelectedItems()
   {
-    fetchData(selectedType, selectedSort, selectedDiet, selectedCuisine);
+    fetchData(selectedType, selectedQuery, selectedSort, selectedDiet, selectedCuisine);
   }
 
   listOrGrid()

@@ -24,13 +24,11 @@ class _SearchPageState extends State<SearchPage>
   @override
   void initState()
   {
-    final provider = Provider.of<DataProviders>(context,listen: false);
-    
     controller.addListener(()
     {
       if(controller.position.maxScrollExtent == controller.offset)
       {
-        provider.extendList();
+        Provider.of<DataProviders>(context,listen: false).extendList();
       }      
     });
     super.initState();
@@ -59,16 +57,20 @@ _appbar(foodName,context)
     elevation: 2,
     leading: IconButton(onPressed: ()=> Navigator.pop(context),
     icon: Icon(Icons.keyboard_arrow_left_rounded, size: 36, color: Styles.whiteColor)),
-    title: ListTile
+    title: TextField
     (
-      title: Text(foodName,style: Styles().titleWhite),
-      subtitle: provider.showSelectedItems()[0] == "" && provider.showSelectedItems()[1] == "" && provider.showSelectedItems()[2] == "" ? 
-      null : Text
-      (
-        "${provider.showSelectedItems()[0]} ${provider.showSelectedItems()[1]} ${provider.showSelectedItems()[2]}",
-        maxLines: 2, style: Styles().foodListSubTitle
-      ),
+      
     ),
+    //ListTile
+    //(
+    //  title: Text(foodName,style: Styles().titleWhite),
+    //  subtitle: provider.showSelectedItems()[0] == "" && provider.showSelectedItems()[1] == "" && provider.showSelectedItems()[2] == "" ? 
+    //  null : Text
+    //  (
+    //    "${provider.showSelectedItems()[0]} ${provider.showSelectedItems()[1]} ${provider.showSelectedItems()[2]}",
+    //    maxLines: 2, style: Styles().foodListSubTitle
+    //  ),
+    //),
     actions:
     [
       const FilterBottomSheet(),

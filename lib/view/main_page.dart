@@ -138,7 +138,7 @@ _categories(context,width)
             onTap: ()
             {
               filterProv.clearAllButtons();
-              dataProv.fetchData(categories[index]["text"],null,null,null);
+              dataProv.fetchData(categories[index]["text"],null,null,null,null);
               Navigator.push(context, MaterialPageRoute(builder: (context) =>
               SearchPage(foodName: categories[index]["text"], deviceWidth: width)));
             },
