@@ -49,6 +49,7 @@ class _SearchPageState extends State<SearchPage>
 _appbar(foodName,context)
 {
   final provider = Provider.of<DataProviders>(context);
+  final appBarProv = Provider.of<AppBarProviders>(context);
 
   return AppBar
   (
@@ -57,20 +58,33 @@ _appbar(foodName,context)
     elevation: 2,
     leading: IconButton(onPressed: ()=> Navigator.pop(context),
     icon: Icon(Icons.keyboard_arrow_left_rounded, size: 36, color: Styles.whiteColor)),
-    title: TextField
+    title: appBarProv.searchMode == true ?
+    TextField
     (
-      
+      decoration: InputDecoration
+      (
+        hintText: "Search $foodName!",
+        hintStyle: Styles().searchBarHintText
+      ),
+      onTapOutside:(event) => appBarProv.searchModeSwitch(),
+      onSubmitted: (value)
+      {
+        provider.fetchData(selectedType, value, selectedSort, selectedDiet, selectedCuisine);
+        appBarProv.setTitle();
+        appBarProv.searchModeSwitch();
+      },
+    ) :
+    ListTile
+    (
+      onTap: () => appBarProv.searchModeSwitch(),
+      title: Text(appBarProv.title == "" ? foodName : selectedQuery,style: Styles().titleWhite),
+      subtitle: provider.showSelectedItems()[0] == "" && provider.showSelectedItems()[1] == "" && provider.showSelectedItems()[2] == "" ? 
+      null : Text
+      (
+        "${provider.showSelectedItems()[0]} ${provider.showSelectedItems()[1]} ${provider.showSelectedItems()[2]}",
+        maxLines: 2, style: Styles().foodListSubTitle
+      ),
     ),
-    //ListTile
-    //(
-    //  title: Text(foodName,style: Styles().titleWhite),
-    //  subtitle: provider.showSelectedItems()[0] == "" && provider.showSelectedItems()[1] == "" && provider.showSelectedItems()[2] == "" ? 
-    //  null : Text
-    //  (
-    //    "${provider.showSelectedItems()[0]} ${provider.showSelectedItems()[1]} ${provider.showSelectedItems()[2]}",
-    //    maxLines: 2, style: Styles().foodListSubTitle
-    //  ),
-    //),
     actions:
     [
       const FilterBottomSheet(),

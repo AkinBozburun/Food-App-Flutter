@@ -9,9 +9,12 @@ class AppBarProviders extends ChangeNotifier
 {
   double height = 0;
   Color appBarColor = Colors.transparent;
-  bool childControl = false;
 
+  bool childControl = false;
   bool isTriggered = false;
+  bool searchMode = false;
+
+  String title = "";
 
   late ScrollController scrollController;
 
@@ -44,6 +47,18 @@ class AppBarProviders extends ChangeNotifier
         isTriggered = !isTriggered;
       }
     }
+  }
+
+  searchModeSwitch()
+  {
+    searchMode = !searchMode;
+    notifyListeners();
+  }
+
+  setTitle()
+  {
+    title = selectedQuery!;
+    notifyListeners();
   }
 }
 
@@ -148,42 +163,47 @@ String selectedCuisine = "";
 
 class DataProviders extends ChangeNotifier
 {
+
+  final apiKey = {"x-api-key" : "b3615cad35ab43ee8a6d5892e149ff05"};
+
   bool isGrid = false;
 
   int offset = 0;
   int totalResult = 0;
   List<Results> recipeList = [];
 
-  late var response;
+  late String api;
 
   fetchData(String? type, String? query, String? sort, String? diet, String? cuisine) async
   {
     selectedType = type;
+    selectedQuery = query;
+    offset = 0;
 
     String? typeText = type != null? "type=$type" : null;
-    String? queryText = type != null? "type=$query" : null;
+    String? queryText = query != null? "query=$query" : null;
     String? sortText = sort != null? "sort=$sort" : null;
     String? dietText = diet != null? "diet=$diet" : null;
     String? cuisineText = cuisine != null? "cuisine=$cuisine" : null;
 
-    String api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$queryText&$sortText&$dietText&$cuisineText&number=32&offset=$offset";
-    final data = await http.get
-    (      
-      headers: {"x-api-key" : "b3615cad35ab43ee8a6d5892e149ff05"},
-      Uri.parse(api),
-    );
+    api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$queryText&$sortText&$dietText&$cuisineText&number=32&offset=";
 
-    response = Recipes.fromJson(json.decode(data.body));
-
+    final data = await http.get(headers: apiKey, Uri.parse(api+offset.toString()));
+    final response = Recipes.fromJson(json.decode(data.body));
     totalResult = response.totalResults;
-    recipeList = [];
+    recipeList = [];    
     recipeList.addAll(response.results);
     notifyListeners();
   }
-
-  extendList()
+  
+  extendList() async
   {
-    offset = recipeList.length;    
+    offset = recipeList.length;
+    
+    print(api+offset.toString());
+
+    final data = await http.get(headers: apiKey, Uri.parse(api+offset.toString()));
+    final response = Recipes.fromJson(json.decode(data.body));
     recipeList.addAll(response.results);
     notifyListeners();
     print(offset);
