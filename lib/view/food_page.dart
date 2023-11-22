@@ -66,17 +66,17 @@ _customAppbar(context)
 }
 
 _bodyFood(context)
-{
-  foodInfoIcon(iconName, info) =>
-  Column(children:
+{ 
+
+  foodInfoIcon(iconName, info) => Column
+  (children:
   [
     Image.asset("images/$iconName.png"),
     const SizedBox(height: 6),
     Text(info,style: Styles().foodPageText),
   ]);
 
-  columnPart(titleText, List<Widget> children) =>
-  Column
+  columnPart(titleText, List<Widget> children) => Column
   (
     crossAxisAlignment: CrossAxisAlignment.start,
     children:
@@ -108,12 +108,17 @@ _bodyFood(context)
       [
         Text("Calorie",style: Styles().categorieText),
         Image.asset("images/calories.png"),
-        Text("456 Kcal",style: Styles().calorieText),
+        Column(children:
+        [
+          Text("456 Kcal",style: Styles().calorieText),
+          Text("Daily 29%",style: Styles().categorieText),
+        ])
       ],
     ),
   );
 
   final prov = Provider.of<AppBarProviders>(context,listen: false);
+  final provider = Provider.of<DataProviders>(context);
 
   return SingleChildScrollView
   (
@@ -124,7 +129,7 @@ _bodyFood(context)
       [
         Stack(children:
         [          
-          SizedBox(height: 300,width: double.maxFinite, child: Image.asset("images/cake.jpg", fit: BoxFit.cover)),
+          SizedBox(height: 300,width: double.maxFinite, child: Image.network(provider.response.image)),
           SafeArea
           (
             child: GestureDetector
@@ -139,8 +144,7 @@ _bodyFood(context)
                 ),
                 margin: const EdgeInsets.only(left: 16,top: 12),
                 height: 42,
-                width: 42,
-                
+                width: 42,                
                 child: Center(child: ReadyWidgets().backIcon),
               ),
             ),
@@ -227,7 +231,7 @@ _bodyFood(context)
                 [
                   SizedBox
                   (
-                    height: 164,
+                    height: 172,
                     child: ListView.separated
                     (
                       scrollDirection: Axis.horizontal,

@@ -52,7 +52,7 @@ _scaffold(context)
           ),
           onSubmitted: (value)
           {
-            dataProv.fetchData(null, value, null, null, null);
+            dataProv.fetchListData(null, value, null, null, null);
             Navigator.push(context, MaterialPageRoute(builder: (context) =>
             ResultsPage(foodName: value, deviceWidth: width)));
           },
@@ -184,7 +184,7 @@ _categories(context,width)
             onTap: ()
             {
               filterProv.clearAllButtons();
-              dataProv.fetchData(categories[index]["text"],null,null,null,null);
+              dataProv.fetchListData(categories[index]["text"],null,null,null,null);
               Navigator.push(context, MaterialPageRoute(builder: (context) =>
               ResultsPage(foodName: categories[index]["text"], deviceWidth: width)));
             },

@@ -85,7 +85,7 @@ _appbar(foodName,context)
       onTapOutside:(event) => appBarProv.searchModeSwitch(),
       onSubmitted: (value)
       {
-        provider.fetchData(selectedType, value, selectedSort, selectedDiet, selectedCuisine);
+        provider.fetchListData(selectedType, value, selectedSort, selectedDiet, selectedCuisine);
         appBarProv.setTitle();
         appBarProv.searchModeSwitch();
       },

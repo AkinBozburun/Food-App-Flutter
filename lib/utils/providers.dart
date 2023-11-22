@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:my_food_app/model/food_recipe_model.dart';
 import 'package:my_food_app/model/recipe_list_model.dart';
 import 'package:my_food_app/utils/local_datas.dart';
 import 'package:my_food_app/utils/styles.dart';
@@ -182,7 +183,7 @@ class DataProviders extends ChangeNotifier
 
   late String api;
 
-  fetchData(String? type, String? query, String? sort, String? diet, String? cuisine) async
+  fetchListData(String? type, String? query, String? sort, String? diet, String? cuisine) async
   {
     selectedType = type;
     selectedQuery = query;
@@ -214,6 +215,17 @@ class DataProviders extends ChangeNotifier
     notifyListeners();
   }
 
+  late Food response;
+
+  fetchRecipeByID(String id) async
+  {
+    String api = "https://api.spoonacular.com/recipes/$id/information?includeNutrition=true";
+
+    final data = await http.get(headers: apiKey, Uri.parse(api));
+    response = Food.fromJson(json.decode(data.body));    
+  }
+  
+
   showSelectedItems()
   {
     return [
@@ -225,7 +237,7 @@ class DataProviders extends ChangeNotifier
 
   gatherSelectedItems()
   {
-    fetchData(selectedType, selectedQuery, selectedSort, selectedDiet, selectedCuisine);
+    fetchListData(selectedType, selectedQuery, selectedSort, selectedDiet, selectedCuisine);
   }
 
   listOrGrid()
