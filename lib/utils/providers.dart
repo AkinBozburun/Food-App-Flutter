@@ -60,6 +60,14 @@ class AppBarProviders extends ChangeNotifier
     title = selectedQuery!;
     notifyListeners();
   }
+
+  bool mainBarIsSearching = false;
+
+  mainPageSearchMode()
+  {
+    mainBarIsSearching = !mainBarIsSearching;
+    notifyListeners();
+  }
 }
 
 class FilterProviders extends ChangeNotifier
@@ -170,7 +178,7 @@ class DataProviders extends ChangeNotifier
 
   int offset = 0;
   int totalResult = 0;
-  List<Results> recipeList = [];
+  List<Results>? recipeList;
 
   late String api;
 
@@ -192,21 +200,18 @@ class DataProviders extends ChangeNotifier
     final response = Recipes.fromJson(json.decode(data.body));
     totalResult = response.totalResults;
     recipeList = [];    
-    recipeList.addAll(response.results);
+    recipeList!.addAll(response.results);
     notifyListeners();
   }
   
   extendList() async
   {
-    offset = recipeList.length;
-    
-    print(api+offset.toString());
+    offset = recipeList!.length;
 
     final data = await http.get(headers: apiKey, Uri.parse(api+offset.toString()));
     final response = Recipes.fromJson(json.decode(data.body));
-    recipeList.addAll(response.results);
+    recipeList!.addAll(response.results);
     notifyListeners();
-    print(offset);
   }
 
   showSelectedItems()

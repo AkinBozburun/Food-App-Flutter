@@ -4,7 +4,7 @@ import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/providers.dart';
 import 'package:my_food_app/utils/styles.dart';
 import 'package:my_food_app/view/food_page.dart';
-import 'package:my_food_app/view/search_page.dart';
+import 'package:my_food_app/view/results_page.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget
@@ -18,51 +18,54 @@ class MainPage extends StatefulWidget
 class _MainPageState extends State<MainPage>
 {
   @override
-  Widget build(BuildContext context)
-  {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+  Widget build(BuildContext context) => _scaffold(context);
+}
 
+_scaffold(context)
+{
+  final prov = Provider.of<AppBarProviders>(context);
+  final dataProv = Provider.of<DataProviders>(context);
+
+  double height = MediaQuery.of(context).size.height;
+  double width = MediaQuery.of(context).size.width;
+
+  if(prov.mainBarIsSearching == true)
+  {
+    return Scaffold
+    (
+      backgroundColor: Styles.whiteColor,
+      appBar: AppBar
+      (
+        backgroundColor: Styles.greenColor,
+        leading: IconButton(onPressed: () => prov.mainPageSearchMode(), icon: ReadyWidgets().backIcon),
+        title: TextField
+        (
+          autofocus: true,
+          style: Styles().searchBarInputText,
+          enableSuggestions: false,
+          cursorColor: Styles.darkGreyColor,
+          decoration: InputDecoration
+          (
+            hintText: "Search for recipes!",
+            border: InputBorder.none,
+            hintStyle: Styles().searchBarHintText,
+          ),
+          onSubmitted: (value)
+          {
+            dataProv.fetchData(null, value, null, null, null);
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+            ResultsPage(foodName: value, deviceWidth: width)));
+          },
+        ),
+      ),
+    );
+  }
+  else
+  {
     return Scaffold
     (
       backgroundColor: Styles.greenColor,
-      appBar: AppBar
-      (
-        toolbarHeight: height*0.2,
-        backgroundColor: Colors.transparent,
-        scrolledUnderElevation: 0,
-        title: Column
-        (
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-          [
-            Text("Find Recipes!",style: Styles().titleWhite),
-            const SizedBox(height: 12),
-            Container
-            (
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration
-              (
-                color: Styles.whiteColor, borderRadius: BorderRadius.circular(36),
-                border: Border.all(color: Styles.darkGreyColor)
-              ),
-              child: TextField
-              (
-                decoration: InputDecoration
-                (
-                  icon: const Icon(Icons.search_rounded),
-                  iconColor: Colors.black38,
-                  contentPadding: const EdgeInsets.all(4),
-                  hintText: "Search",
-                  border: InputBorder.none,
-                  hintStyle: Styles().searchBarHintText,
-                ),
-                onChanged: (value){},            
-              ),
-            ),
-          ],
-        ),
-      ),
+      appBar: _appbar(height, width, context),
       body: SafeArea
       (
         child: SingleChildScrollView
@@ -109,6 +112,49 @@ class _MainPageState extends State<MainPage>
   }
 }
 
+_appbar(height, width, context)
+{
+  final prov = Provider.of<AppBarProviders>(context);
+
+  return AppBar
+  (
+    toolbarHeight: height*0.2,
+    backgroundColor: Colors.transparent,
+    scrolledUnderElevation: 0,
+    title: Column
+    (
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:
+      [
+        Text("Find Recipes!",style: Styles().titleWhite),
+        const SizedBox(height: 12),
+        Container
+        (
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration
+          (
+            color: Styles.whiteColor, borderRadius: BorderRadius.circular(36),
+            border: Border.all(color: Styles.darkGreyColor)
+          ),
+          child: TextField
+          (
+            onTap: () => prov.mainPageSearchMode(),
+            decoration: InputDecoration
+            (
+              icon: const Icon(Icons.search_rounded),
+              iconColor: Colors.black38,
+              contentPadding: const EdgeInsets.all(4),
+              hintText: "Search",
+              border: InputBorder.none,
+              hintStyle: Styles().searchBarHintText,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 _categories(context,width)
 {
   final dataProv = Provider.of<DataProviders>(context);
@@ -140,7 +186,7 @@ _categories(context,width)
               filterProv.clearAllButtons();
               dataProv.fetchData(categories[index]["text"],null,null,null,null);
               Navigator.push(context, MaterialPageRoute(builder: (context) =>
-              SearchPage(foodName: categories[index]["text"], deviceWidth: width)));
+              ResultsPage(foodName: categories[index]["text"], deviceWidth: width)));
             },
             child: Container
             (

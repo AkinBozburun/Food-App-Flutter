@@ -6,31 +6,39 @@ import 'package:my_food_app/view/filter_bottomsheet.dart';
 import 'package:my_food_app/view/food_page.dart';
 import 'package:provider/provider.dart';
 
-class SearchPage extends StatefulWidget
+class ResultsPage extends StatefulWidget
 {
   final String foodName;
   final double deviceWidth;
 
-  const SearchPage({super.key, required this.foodName, required this.deviceWidth});
+  const ResultsPage({super.key, required this.foodName, required this.deviceWidth});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<ResultsPage> createState() => _ResultsPageState();
 }
 
-class _SearchPageState extends State<SearchPage>
+class _ResultsPageState extends State<ResultsPage>
 {
-  final controller = ScrollController();
+  final controller = ScrollController();  
+
+  initController()
+  {
+    final provider =  Provider.of<DataProviders>(context,listen: false);
+
+    controller.addListener(()
+    {
+      if(controller.position.maxScrollExtent == controller.offset  && provider.offset != provider.totalResult)
+      {
+        provider.extendList();
+      }      
+    });
+  }
 
   @override
   void initState()
   {
-    controller.addListener(()
-    {
-      if(controller.position.maxScrollExtent == controller.offset)
-      {
-        Provider.of<DataProviders>(context,listen: false).extendList();
-      }      
-    });
+    Provider.of<AppBarProviders>(context,listen: false).mainBarIsSearching = false;
+    initController();
     super.initState();
   }
 
@@ -51,6 +59,8 @@ _appbar(foodName,context)
   final provider = Provider.of<DataProviders>(context);
   final appBarProv = Provider.of<AppBarProviders>(context);
 
+  FocusNode focus = FocusNode();
+
   return AppBar
   (
     toolbarHeight: 64,
@@ -61,10 +71,16 @@ _appbar(foodName,context)
     title: appBarProv.searchMode == true ?
     TextField
     (
+      autofocus: true,
+      style: Styles().searchBarInputText,
+      enableSuggestions: false,
+      cursorColor: Styles.darkGreyColor,
       decoration: InputDecoration
       (
-        hintText: "Search $foodName!",
-        hintStyle: Styles().searchBarHintText
+        contentPadding: Measures.all8,
+        hintText: "Search for recipes!",
+        border: InputBorder.none,
+        hintStyle: Styles().searchBarHintText,
       ),
       onTapOutside:(event) => appBarProv.searchModeSwitch(),
       onSubmitted: (value)
@@ -76,7 +92,11 @@ _appbar(foodName,context)
     ) :
     ListTile
     (
-      onTap: () => appBarProv.searchModeSwitch(),
+      onTap: ()
+      {
+        appBarProv.searchModeSwitch();
+        focus.requestFocus();
+      },
       title: Text(appBarProv.title == "" ? foodName : selectedQuery,style: Styles().titleWhite),
       subtitle: provider.showSelectedItems()[0] == "" && provider.showSelectedItems()[1] == "" && provider.showSelectedItems()[2] == "" ? 
       null : Text
@@ -101,35 +121,43 @@ _foodList(context, width, controller)
 {
   final provider = Provider.of<DataProviders>(context);
 
-  if(provider.recipeList !=[])
+  if(provider.recipeList == null)
+  {
+    return Center(child: CircularProgressIndicator(color: Styles.greenColor));
+  }
+  if(provider.totalResult == 0)
+  {
+    return Center(child: Text("No recipes found",style: Styles().foodListText));
+  }
+  else
   {
     return provider.isGrid == false ?
     ListView.separated
     (
       controller: controller,
       padding: const EdgeInsets.all(16),
-      itemCount: provider.recipeList.length,
+      itemCount: provider.recipeList!.length,
       itemBuilder: (context, index) => InkWell
       (
-        onTap: (){print(provider.recipeList[index].id);},
+        onTap: (){print(provider.recipeList![index].id);},
         borderRadius: Measures.border12,
         child: Ink(width: width,child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:
         [
           ClipRRect
           (
             borderRadius: Measures.border12,
-            child: Image.network(provider.recipeList[index].image,width: 82, height: 82, fit: BoxFit.cover),
+            child: Image.network(provider.recipeList![index].image,width: 82, height: 82, fit: BoxFit.cover),
           ),
           SizedBox
           (
             width: width*0.65,
             child: ListTile
             (
-              title: Text(provider.recipeList[index].title, style: Styles().foodListText),
-              subtitle: provider.recipeList[index].nutrition == null ? null : 
+              title: Text(provider.recipeList![index].title, style: Styles().foodListText),
+              subtitle: provider.recipeList![index].nutrition == null ? null : 
               Text
               (
-               "${provider.recipeList[index].nutrition!.nutrients[0].name} : ${provider.recipeList[index].nutrition!.nutrients[0].amount.toInt()} ${provider.recipeList[index].nutrition!.nutrients[0].unit}",
+               "${provider.recipeList![index].nutrition!.nutrients[0].name} : ${provider.recipeList![index].nutrition!.nutrients[0].amount.toInt()} ${provider.recipeList![index].nutrition!.nutrients[0].unit}",
                style: Styles().foodListSubText
               ),
             )
@@ -142,7 +170,7 @@ _foodList(context, width, controller)
     (
       controller: controller,
       padding: Measures.all16,
-      itemCount: provider.recipeList.length,
+      itemCount: provider.recipeList!.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount
       (
         crossAxisCount: 2,
@@ -167,18 +195,18 @@ _foodList(context, width, controller)
               ClipRRect
               (
                 borderRadius: BorderRadius.only(topLeft: Measures.radius16,topRight: Measures.radius16),
-                child: Image.network(provider.recipeList[index].image, fit: BoxFit.cover),
+                child: Image.network(provider.recipeList![index].image, fit: BoxFit.cover),
               ),
               ListTile
               (
                 title: Text
                 (
-                  provider.recipeList[index].title, style: Styles().foodListText,
-                  maxLines: provider.recipeList[index].nutrition == null ? 3 : 2, overflow: TextOverflow.ellipsis,
+                  provider.recipeList![index].title, style: Styles().foodListText,
+                  maxLines: provider.recipeList![index].nutrition == null ? 3 : 2, overflow: TextOverflow.ellipsis,
                 ),
-                subtitle: provider.recipeList[index].nutrition == null ? null : Text
+                subtitle: provider.recipeList![index].nutrition == null ? null : Text
                 (
-                  "${provider.recipeList[index].nutrition!.nutrients[0].name} : ${provider.recipeList[index].nutrition!.nutrients[0].amount.toInt()} ${provider.recipeList[index].nutrition!.nutrients[0].unit}",
+                  "${provider.recipeList![index].nutrition!.nutrients[0].name} : ${provider.recipeList![index].nutrition!.nutrients[0].amount.toInt()} ${provider.recipeList![index].nutrition!.nutrients[0].unit}",
                   style: Styles().foodListSubText
                 ),
               ),
@@ -187,11 +215,7 @@ _foodList(context, width, controller)
         ),
       ),
     );
-  }
-  else
-  {
-    return Center(child: CircularProgressIndicator(color: Styles.greenColor));
-  }
+  }  
 }
 
 _bottomBar(context)
@@ -209,6 +233,9 @@ _bottomBar(context)
         BoxShadow(blurRadius: 6,spreadRadius: 1,color: Styles.darkGreyColor)
       ],
     ),
-    child: Center(child: Text("${provider.recipeList.length} of ${provider.totalResult} Recipe",style: Styles().foodListSubText)),
+    child:
+    provider.recipeList== null ?
+    const Center() :
+    Center(child: Text("${provider.recipeList!.length} of ${provider.totalResult} Recipe",style: Styles().foodListSubText)),
   );
 }

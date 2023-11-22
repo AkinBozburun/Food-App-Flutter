@@ -101,4 +101,7 @@ List cuisinesList =
   },
 ];
 
-Icon backIcon = Icon(Icons.keyboard_arrow_left_rounded,size: 32,color: Styles.whiteColor);
+class ReadyWidgets
+{
+  Icon backIcon = Icon(Icons.keyboard_arrow_left_rounded,size: 32,color: Styles.whiteColor);
+}

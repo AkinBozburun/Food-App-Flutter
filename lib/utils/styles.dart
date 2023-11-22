@@ -13,6 +13,7 @@ class Styles
   final titleBlack = GoogleFonts.poppins(fontSize: 20, color: blackColor,fontWeight: FontWeight.bold);
   final subTitleBlack = GoogleFonts.poppins(fontSize: 16, color: blackColor,fontWeight: FontWeight.w600);
 
+  final searchBarInputText = GoogleFonts.poppins(fontSize: 16, color: whiteColor, fontWeight: FontWeight.w500);
   final searchBarHintText = GoogleFonts.poppins(fontSize: 16, color: darkGreyColor, fontWeight: FontWeight.w400);
 
   final categorieText = GoogleFonts.poppins(fontSize: 12, color: blackColor, fontWeight: FontWeight.w400);
