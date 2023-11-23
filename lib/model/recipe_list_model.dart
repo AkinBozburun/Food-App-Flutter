@@ -21,38 +21,38 @@ class Results
   late final int id;
   late final String title;
   late final String image;
-  late final Nutrition? nutrition;
+  late final NutritionInList? nutrition;
   
   Results.fromJson(Map<String, dynamic> json)
   {
     id = json['id'];
     title = json['title'];
     image = json['image'];
-    nutrition = json['nutrition'] == null ? null : Nutrition.fromJson(json['nutrition']);
+    nutrition = json['nutrition'] == null ? null : NutritionInList.fromJson(json['nutrition']);
   }
 }
 
-class Nutrition
+class NutritionInList
 {
-  Nutrition({required this.nutrients});
+  NutritionInList({required this.nutrients});
 
-  late final List<Nutrients> nutrients;
+  late final List<NutrientsInList> nutrients;
   
-  Nutrition.fromJson(Map<String, dynamic> json)
+  NutritionInList.fromJson(Map<String, dynamic> json)
   {
-    nutrients = List.from(json['nutrients']).map((e)=>Nutrients.fromJson(e)).toList();
+    nutrients = List.from(json['nutrients']).map((e)=>NutrientsInList.fromJson(e)).toList();
   }
 }
 
-class Nutrients
+class NutrientsInList
 {
-  Nutrients({required this.name, required this.amount});
+  NutrientsInList({required this.name, required this.amount});
   
   late final String name;
   late final double amount;
   late final String unit;
   
-  Nutrients.fromJson(Map<String, dynamic> json)
+  NutrientsInList.fromJson(Map<String, dynamic> json)
   {
     name = json['name'];
     amount = json['amount'];

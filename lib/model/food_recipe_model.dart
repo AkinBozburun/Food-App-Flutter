@@ -1,6 +1,14 @@
 class Food
 {
-  Food({required this.healthScore, required this.id, required this.title, required this.readyInMinutes, required this.servings, required this.image, required this.nutrition, required this.summary, required this.analyzedInstructions});
+  Food
+  ({
+    required this.healthScore, required this.id,
+    required this.title, required this.readyInMinutes,
+    required this.servings, required this.image,
+    required this.nutrition, required this.summary,
+    required this.dishTypes, required this.diets,
+    required this.analyzedInstructions
+  });
 
   late final int healthScore;
   late final int id;
@@ -9,6 +17,8 @@ class Food
   late final int servings;
   late final String image;
   late final Nutrition nutrition;
+  late final String dishTypes;
+  late final String diets;
   late final String summary;
   late final List<AnalyzedInstructions> analyzedInstructions;
   
@@ -21,6 +31,8 @@ class Food
     servings = json['servings'];
     image = json['image'];
     nutrition = Nutrition.fromJson(json['nutrition']);
+    dishTypes = json['dishTypes'][0] ?? [];
+    diets = json['diets'][0] ?? [];
     summary = json['summary'];
     analyzedInstructions = List.from(json['analyzedInstructions']).map((e)=>AnalyzedInstructions.fromJson(e)).toList();
   }
@@ -29,8 +41,8 @@ class Food
 class Nutrition
 {
   Nutrition({required this.nutrients, required this.ingredients});
+  
   late final List<Nutrients> nutrients;
-
   late final List<Ingredients> ingredients;
   
   Nutrition.fromJson(Map<String, dynamic> json)
@@ -42,19 +54,17 @@ class Nutrition
 
 class Nutrients
 {
-  Nutrients({required this.name, required this.amount, required this.unit, required this.percentOfDailyNeeds});
+  Nutrients({required this.name, required this.amount, required this.unit});
 
   late final String name;
   late final double amount;
   late final String unit;
-  late final double percentOfDailyNeeds;
   
   Nutrients.fromJson(Map<String, dynamic> json)
   {
     name = json['name'];
     amount = json['amount'];
     unit = json['unit'];
-    percentOfDailyNeeds = json['percentOfDailyNeeds'];
   }
 }
 

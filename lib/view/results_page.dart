@@ -139,7 +139,11 @@ _foodList(context, width, controller)
       itemCount: provider.recipeList!.length,
       itemBuilder: (context, index) => InkWell
       (
-        onTap: (){print(provider.recipeList![index].id);},
+        onTap: ()
+        {
+          provider.fetchRecipeByID(provider.recipeList![index].id.toString());
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const FoodPage()));
+        },
         borderRadius: Measures.border12,
         child: Ink(width: width,child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:
         [

@@ -50,6 +50,14 @@ class AppBarProviders extends ChangeNotifier
     }
   }
 
+  disposeAppbar()
+  {
+    height = 0;
+    appBarColor = Colors.transparent;
+    childControl = false;
+    notifyListeners();
+  }
+
   searchModeSwitch()
   {
     searchMode = !searchMode;
@@ -215,14 +223,61 @@ class DataProviders extends ChangeNotifier
     notifyListeners();
   }
 
-  late Food response;
+  //late Food response;
+
+  String imageURL = "";
+  String title = "";
+
+  String readyTime = "";
+  String healthScore = "";
+  String serving = "";
+  String type = "";
+  String diet = "";
+
+  String summary = "";
+
+  List<Ingredients> ingredientsList = [];
+  List<Steps> instructionsList = [];
+  List<Nutrients> nutrientsList = [];
 
   fetchRecipeByID(String id) async
   {
     String api = "https://api.spoonacular.com/recipes/$id/information?includeNutrition=true";
 
     final data = await http.get(headers: apiKey, Uri.parse(api));
-    response = Food.fromJson(json.decode(data.body));    
+    final response = Food.fromJson(json.decode(data.body));
+
+    imageURL = response.image;
+    title = response.title;
+    readyTime = response.readyInMinutes.toString();
+    healthScore = "${response.healthScore}/100";
+    serving = response.servings.toString();
+    type = response.dishTypes;
+    diet = response.diets;
+    summary = response.summary;
+    ingredientsList = response.nutrition.ingredients;
+    List<AnalyzedInstructions> instruction = response.analyzedInstructions;
+    instructionsList = instruction[0].steps;
+    addNutrients(response.nutrition.nutrients);
+    notifyListeners();
+  }
+
+  addNutrients(List nutListData)
+  {
+    nutrientsList = [];
+    for(int a=0; a<nutrientsIcons.length; a++)
+    {
+      for(int i=0; i<nutListData.length; i++)
+      {
+        if(nutrientsIcons[a]["name"] == nutListData[i].name)
+        {
+          if(!nutrientsList.contains(nutrientsIcons[a]["name"]))
+          {
+            nutrientsList.add(nutListData[i]);
+          }
+        }
+      }
+    }
   }
   
 

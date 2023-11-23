@@ -101,6 +101,34 @@ List cuisinesList =
   },
 ];
 
+List nutrientsIcons = 
+[
+  {
+    "name" : "Calories",
+    "image" : "images/calories.png"
+  },
+  {
+    "name" : "Fat",
+    "image" : "images/fat.png"
+  },
+  {
+    "name" : "Carbohydrates",
+    "image" : "images/bread.png"
+  },
+  {
+    "name" : "Sugar",
+    "image" : "images/sugar.png"
+  },
+  {
+    "name" : "Protein",
+    "image" : "images/chicken.png"
+  },
+  {
+    "name" : "Fiber",
+    "image" : "images/fiber.png"
+  },
+];
+
 class ReadyWidgets
 {
   Icon backIcon = Icon(Icons.keyboard_arrow_left_rounded,size: 32,color: Styles.whiteColor);

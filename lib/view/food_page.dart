@@ -43,6 +43,8 @@ class _FoodPageState extends State<FoodPage>
 _customAppbar(context)
 {
   final prov = Provider.of<AppBarProviders>(context);
+  final provider = Provider.of<DataProviders>(context);
+
   return AnimatedContainer
   (
     duration: const Duration(milliseconds: 500),
@@ -52,29 +54,41 @@ _customAppbar(context)
     width: MediaQuery.of(context).size.width,
     child: SafeArea
     (
-      child: prov.childControl == true ? Row
+      child: prov.childControl == true ? Padding
       (
-        children:
-        [
-          IconButton(onPressed: ()=> Navigator.pop(context),
-          icon: ReadyWidgets().backIcon),
-          Text("Berry Banana Breakfast Smoothie",style: Styles().titleWhite),
-        ],
+        padding: const EdgeInsets.only(right: 16),
+        child: Row
+        (
+          children:
+          [
+            IconButton(onPressed: ()
+            {
+              prov.disposeAppbar();
+              Navigator.pop(context);
+            },
+            icon: ReadyWidgets().backIcon),
+            Flexible(child: Text(provider.title, overflow: TextOverflow.ellipsis, style: Styles().titleWhite)),
+          ],
+        ),
       ) : const Center(),
     ),
   );
 }
 
 _bodyFood(context)
-{ 
-
-  foodInfoIcon(iconName, info) => Column
-  (children:
-  [
-    Image.asset("images/$iconName.png"),
-    const SizedBox(height: 6),
-    Text(info,style: Styles().foodPageText),
-  ]);
+{
+  foodInfoIcon(iconName, String info) => SizedBox
+  (
+    height: 92,
+    width: 64,
+    child: Column
+    (children:
+    [
+      SizedBox(height: 48,child: Image.asset("images/$iconName.png")),
+      const SizedBox(height: 12),
+      Flexible(child: Text(info, overflow: TextOverflow.clip, textAlign: TextAlign.center, style: Styles().foodPageText)),
+    ]),
+  );
 
   columnPart(titleText, List<Widget> children) => Column
   (
@@ -87,15 +101,9 @@ _bodyFood(context)
     ],
   );
 
-  List instroList =
-  [
-    "Take some yogurt in your favorite flavor and add 1 container to your blender.",
-    "Add in the berries, banana, and soy milk and blend. Top your glass with a few graham cracker crumbs and serve."
-  ];
-
-  nutritionCard() => Container
-  (
-    width: 112,    
+  nutritionCard(title, image, amount, unit) => Container
+  (    
+    width: MediaQuery.of(context).size.width*0.26,
     decoration: BoxDecoration
     (
       color: Styles.darkGreyColor,
@@ -106,13 +114,9 @@ _bodyFood(context)
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children:
       [
-        Text("Calorie",style: Styles().categorieText),
-        Image.asset("images/calories.png"),
-        Column(children:
-        [
-          Text("456 Kcal",style: Styles().calorieText),
-          Text("Daily 29%",style: Styles().categorieText),
-        ])
+        Text(title,style: Styles().categorieText),
+        Image.asset(image),
+        Text("$amount $unit",style: Styles().calorieText)
       ],
     ),
   );
@@ -128,8 +132,9 @@ _bodyFood(context)
       children:
       [
         Stack(children:
-        [          
-          SizedBox(height: 300,width: double.maxFinite, child: Image.network(provider.response.image)),
+        [
+          SizedBox(height: 300,width: double.maxFinite, child: provider.imageURL ==""? 
+          Center(child: CircularProgressIndicator(color: Styles.greenColor)) : Image.network(provider.imageURL)),
           SafeArea
           (
             child: GestureDetector
@@ -161,21 +166,22 @@ _bodyFood(context)
               Container
               (
                 margin: const EdgeInsets.only(right: 32),
-                child: Text("Berry Banana Breakfast Smoothie",style: Styles().titleBlack)
+                child: Text(provider.title,style: Styles().titleBlack)
               ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround,children:
               [
-                foodInfoIcon("time", "5 min"),
-                foodInfoIcon("healthcare", "64/100"),
-                foodInfoIcon("serving", "1 Serving"),
-                foodInfoIcon("restaurant", "Vegetarian"),
+                foodInfoIcon("time", "${provider.readyTime} Minutes"),
+                foodInfoIcon("healthcare", provider.healthScore),
+                foodInfoIcon("serving", "${provider.serving} Serving"),
+                foodInfoIcon("restaurant", provider.type),
+                foodInfoIcon("diet", provider.diet),
               ]),
               Divider(color: Styles.greyColor),
               columnPart
               (
                 "Summary",
                 [
-                  Text("If you want to add more <b>lacto ovo vegetarian</b> recipes to your recipe box, Berry Banana Breakfast Smoothie might be a recipe you should try. One portion of this dish contains about <b>21g of protein</b>, <b>10g of fat</b>, and a total of <b>457 calories</b>. This recipe serves 1 and costs 2.07 per serving. 689 people have tried and liked this recipe. It works well as a rather inexpensive breakfast. A mixture of banana, graham cracker crumbs, vanilla yogurt, and a handful of other ingredients are all it takes to make this recipe so yummy.",style: Styles().foodPageText),
+                  Text(provider.summary,style: Styles().foodPageText),
                 ]
               ),
               Divider(color: Styles.greyColor),
@@ -188,13 +194,17 @@ _bodyFood(context)
                     padding: Measures.horizontal0,
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 7,
+                    itemCount: provider.ingredientsList.length,
                     itemBuilder: (context, index) => RichText
                     (
                       text: TextSpan
                       (
                         text: "\u2022  ",style: Styles().foodPageBullet,
-                        children: [TextSpan(text: "ingredient ${index+1}",style: Styles().foodPageText)]
+                        children:
+                        [
+                          TextSpan(text:"${provider.ingredientsList[index].amount} ${provider.ingredientsList[index].unit} ${provider.ingredientsList[index].name}",
+                          style: Styles().foodPageText)
+                        ]
                       ),
                     ),
                     separatorBuilder: (context, index) => const SizedBox(height: 6),
@@ -211,13 +221,13 @@ _bodyFood(context)
                     padding: Measures.horizontal0,
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: instroList.length,
+                    itemCount: provider.instructionsList.length,
                     itemBuilder: (context, index) => RichText
                     (
                       text: TextSpan
                       (
-                        text: "${index+1}-) ",style: Styles().foodPageBullet,
-                        children: [TextSpan(text: instroList[index],style: Styles().foodPageText)]
+                        text: "${provider.instructionsList[index].number}-)  ",style: Styles().foodPageBullet,
+                        children: [TextSpan(text: provider.instructionsList[index].step,style: Styles().foodPageText)]
                       ),
                     ),
                     separatorBuilder: (context, index) => const SizedBox(height: 6),
@@ -236,8 +246,14 @@ _bodyFood(context)
                     (
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
-                      itemCount: 6,
-                      itemBuilder: (context, index) => nutritionCard(),
+                      itemCount: provider.nutrientsList.length,
+                      itemBuilder: (context, index) => nutritionCard
+                      (
+                        provider.nutrientsList[index].name,
+                        nutrientsIcons[index]["image"],
+                        provider.nutrientsList[index].amount.toInt(),
+                        provider.nutrientsList[index].unit
+                      ),
                       separatorBuilder: (context, index) => const SizedBox(width: 12),
                     ),
                   ),
