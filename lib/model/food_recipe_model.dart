@@ -2,37 +2,46 @@ class Food
 {
   Food
   ({
-    required this.healthScore, required this.id,
-    required this.title, required this.readyInMinutes,
+    required this.popular, required this.cheap,required this.healthScore,
+    required this.id, required this.title,
+    required this.cookingMinutes, required this.readyInMinutes,
     required this.servings, required this.image,
     required this.nutrition, required this.summary,
     required this.dishTypes, required this.diets,
-    required this.analyzedInstructions
+    required this.cuisines, required this.analyzedInstructions
   });
 
+  late final bool popular;
+  late final bool cheap;
   late final int healthScore;
   late final int id;
   late final String title;
-  late final int readyInMinutes;
+  late final int cookingMinutes;
+  late final int readyInMinutes;  
   late final int servings;
   late final String image;
   late final Nutrition nutrition;
   late final String dishTypes;
-  late final String diets;
+  late final String? diets;
+  late final String? cuisines;
   late final String summary;
   late final List<AnalyzedInstructions> analyzedInstructions;
   
   Food.fromJson(Map<String, dynamic> json)
   {
+    popular = json['veryPopular'];
+    cheap = json['cheap'];
     healthScore = json['healthScore'];
     id = json['id'];
     title = json['title'];
+    cookingMinutes = json['cookingMinutes'];
     readyInMinutes = json['readyInMinutes'];
     servings = json['servings'];
     image = json['image'];
     nutrition = Nutrition.fromJson(json['nutrition']);
     dishTypes = json['dishTypes'][0] ?? [];
-    diets = json['diets'][0] ?? [];
+    diets = json['diets'].isEmpty ? null : json['diets'][0];
+    cuisines = json['cuisines'].isEmpty ? null : json['cuisines'][0];
     summary = json['summary'];
     analyzedInstructions = List.from(json['analyzedInstructions']).map((e)=>AnalyzedInstructions.fromJson(e)).toList();
   }

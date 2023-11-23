@@ -220,11 +220,16 @@ class DataProviders extends ChangeNotifier
   String imageURL = "";
   String title = "";
 
+  bool isPopular = false;
+  bool isCheap = false;
+
+  String cookTime = "";
   String readyTime = "";
   String healthScore = "";
   String serving = "";
   String type = "";
   String diet = "";
+  String cuisine = "";
 
   String summary = "";
 
@@ -241,11 +246,15 @@ class DataProviders extends ChangeNotifier
 
     imageURL = response.image;
     title = response.title;
+    isPopular = response.popular;
+    isCheap = response.cheap;
+    cookTime = response.readyInMinutes >0 ? "No Cooking" : response.readyInMinutes.toString();
     readyTime = response.readyInMinutes.toString();
     healthScore = "${response.healthScore}/100";
     serving = response.servings.toString();
     type = response.dishTypes;
-    diet = response.diets;
+    diet = response.diets ?? "All diets";
+    cuisine = response.cuisines ?? "Universal";
     summary = response.summary;
     ingredientsList = response.nutrition.ingredients;
     List<AnalyzedInstructions> instruction = response.analyzedInstructions;

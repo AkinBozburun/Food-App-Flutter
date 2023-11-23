@@ -77,10 +77,10 @@ _customAppbar(context)
 
 _bodyFood(context)
 {
-  foodInfoIcon(iconName, String info) => SizedBox
+  foodInfoIcon(iconName, String info) => Container
   (
-    height: 92,
-    width: 64,
+    margin: const EdgeInsets.only(right: 8),
+    width: 72,
     child: Column
     (children:
     [
@@ -168,14 +168,26 @@ _bodyFood(context)
                 margin: const EdgeInsets.only(right: 32),
                 child: Text(provider.title,style: Styles().titleBlack)
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround,children:
-              [
-                foodInfoIcon("time", "${provider.readyTime} Minutes"),
-                foodInfoIcon("healthcare", provider.healthScore),
-                foodInfoIcon("serving", "${provider.serving} Serving"),
-                foodInfoIcon("restaurant", provider.type),
-                foodInfoIcon("diet", provider.diet),
-              ]),
+              SizedBox
+              (
+                height: 92,
+                child: ListView
+                (
+                  scrollDirection: Axis.horizontal,
+                  children:
+                  [
+                    provider.isPopular == true? foodInfoIcon("popular","Very Popular") : const Center(),
+                    provider.isCheap == true ? foodInfoIcon("losses", "Low Budget") : const Center(),                    
+                    foodInfoIcon("time", "${provider.readyTime} Minutes"),
+                    foodInfoIcon("cooking", provider.cookTime),
+                    foodInfoIcon("healthcare", provider.healthScore),
+                    foodInfoIcon("serving", "${provider.serving} Serving"),
+                    foodInfoIcon("restaurant", provider.type),
+                    foodInfoIcon("diet", provider.diet),
+                    foodInfoIcon("nation", provider.cuisine),
+                  ]
+                ),
+              ),
               Divider(color: Styles.greyColor),
               columnPart
               (

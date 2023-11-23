@@ -264,7 +264,7 @@ _recently(width,context)
                         const SizedBox(height: 6),
                         Row(children:
                         [
-                          Image.asset("images/cooking.png"),
+                          SizedBox(height: 16, width: 16, child: Image.asset("images/time.png")),
                           const SizedBox(width: 6),
                           Text("12 Min.", style: Styles().recentlyText2),
                         ]),

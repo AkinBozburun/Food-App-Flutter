@@ -183,7 +183,11 @@ _foodList(context, width, controller)
       ),
       itemBuilder: (context, index) => GestureDetector
       (
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FoodPage())),
+        onTap: ()
+        {
+          provider.fetchRecipeByID(provider.recipeList![index].id.toString());
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const FoodPage()));
+        },
         child: Container
         (
           decoration: BoxDecoration
