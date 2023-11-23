@@ -15,8 +15,6 @@ class AppBarProviders extends ChangeNotifier
   bool isTriggered = false;
   bool searchMode = false;
 
-  String title = "";
-
   late ScrollController scrollController;
 
   initscroll()
@@ -61,12 +59,6 @@ class AppBarProviders extends ChangeNotifier
   searchModeSwitch()
   {
     searchMode = !searchMode;
-    notifyListeners();
-  }
-
-  setTitle()
-  {
-    title = selectedQuery!;
     notifyListeners();
   }
 
@@ -173,7 +165,7 @@ class FilterProviders extends ChangeNotifier
 }
 
 String? selectedType;
-String? selectedQuery;
+String selectedQuery = "";
 String selectedSort = "";
 String selectedDiet = "";
 String selectedCuisine = "";
@@ -194,7 +186,7 @@ class DataProviders extends ChangeNotifier
   fetchListData(String? type, String? query, String? sort, String? diet, String? cuisine) async
   {
     selectedType = type;
-    selectedQuery = query;
+    selectedQuery = query ?? "";
     offset = 0;
 
     String? typeText = type != null? "type=$type" : null;

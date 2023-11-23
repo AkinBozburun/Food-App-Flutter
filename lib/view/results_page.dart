@@ -86,7 +86,6 @@ _appbar(foodName,context)
       onSubmitted: (value)
       {
         provider.fetchListData(selectedType, value, selectedSort, selectedDiet, selectedCuisine);
-        appBarProv.setTitle();
         appBarProv.searchModeSwitch();
       },
     ) :
@@ -97,7 +96,7 @@ _appbar(foodName,context)
         appBarProv.searchModeSwitch();
         focus.requestFocus();
       },
-      title: Text(appBarProv.title == "" ? foodName : selectedQuery,style: Styles().titleWhite),
+      title: Text(selectedQuery == "" ? foodName : selectedQuery,style: Styles().titleWhite),
       subtitle: provider.showSelectedItems()[0] == "" && provider.showSelectedItems()[1] == "" && provider.showSelectedItems()[2] == "" ? 
       null : Text
       (
