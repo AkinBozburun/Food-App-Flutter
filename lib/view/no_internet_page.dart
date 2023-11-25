@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:my_food_app/main.dart';
+import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/styles.dart';
 
 class NoInternetPage extends StatefulWidget
@@ -19,10 +20,11 @@ class _NoInternetPageState extends State<NoInternetPage>
     final connectivityResult = await (Connectivity().checkConnectivity());
     if(connectivityResult != ConnectivityResult.none)
     {
-      Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const NetCheck()),
-      (route) => false);
+      Navigator.pushAndRemoveUntil
+      (
+        context,MaterialPageRoute(builder: (context) => const NetCheck()),
+        (route) => false
+      );
     }
   }
 
@@ -39,16 +41,24 @@ class _NoInternetPageState extends State<NoInternetPage>
           mainAxisAlignment: MainAxisAlignment.center,
           children:
           [
-            //SizedBox
-            //(
-            //  height: 140,
-            //  width: 140,
-            //  child: Image.asset("images/no-internet.png")
-            //),
-            //const SizedBox(height: 30),
-            Text("Check your Internet Connection",style: Styles().titleWhite),
-            const SizedBox(height: 30),
-            IconButton(onPressed: () => _netCheck(context), icon: Icon(Icons.refresh,size: 48, color: Styles.whiteColor))
+            SizedBox(height: 164, width: 164,child: Image.asset("images/alert.png")),
+            const SizedBox(height: 36),
+            Text("No Internet Connection!",style: Styles().titleWhite),
+            Text("Please check your Wi-Fi or mobile data",style: Styles().bottomSheetTitleWhite),
+            const SizedBox(height: 32),
+            InkWell(onTap: () => _netCheck(context),
+            borderRadius: Measures.border24,
+            child: Ink
+            (
+              height: 36,
+              width: 128,
+              decoration: BoxDecoration
+              (
+                color: Styles.whiteColor,
+                borderRadius: Measures.border24
+              ),
+              child: Center(child: Text("Try Again",style: Styles().bottomSheetTitleBlack)),
+            )),
           ],
         ),
       ),

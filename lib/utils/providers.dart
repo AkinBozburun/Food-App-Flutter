@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:my_food_app/model/food_recipe_model.dart';
 import 'package:my_food_app/model/recipe_list_model.dart';
@@ -195,11 +196,21 @@ class DataProviders extends ChangeNotifier
 
     api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$queryText&$sortText&$dietText&$cuisineText&number=32&offset=";
 
-    final data = await http.get(headers: apiKey, Uri.parse(api+offset.toString()));
-    final response = Recipes.fromJson(json.decode(data.body));
-    totalResult = response.totalResults;
-    recipeList = [];    
-    recipeList!.addAll(response.results);
+    final connectivityResult = await (Connectivity().checkConnectivity());
+
+    if(connectivityResult == ConnectivityResult.none)
+    {
+      print("No ınternet");
+    }
+    else
+    {
+      final data = await http.get(headers: apiKey, Uri.parse(api+offset.toString()));
+      final response = Recipes.fromJson(json.decode(data.body));
+      totalResult = response.totalResults;
+      recipeList = [];    
+      recipeList!.addAll(response.results);
+    }
+
     notifyListeners();
   }
   
@@ -242,23 +253,33 @@ class DataProviders extends ChangeNotifier
   {
     String api = "https://api.spoonacular.com/recipes/$id/information?includeNutrition=true";
 
-    final data = await http.get(headers: apiKey, Uri.parse(api));
-    final response = Food.fromJson(json.decode(data.body));
+    final connectivityResult = await (Connectivity().checkConnectivity());
 
-    imageURL = response.image;
-    title = response.title;
-    isPopular = response.popular;
-    isCheap = response.cheap;
-    readyTime = response.readyInMinutes.toString();
-    healthScore = "${response.healthScore}/100";
-    serving = response.servings.toString();
-    type = response.dishTypes;
-    diet = response.diets ?? "General";
-    cuisine = response.cuisines ?? "Universal";
-    summary = response.summary;
-    ingredientsList = response.nutrition.ingredients;
-    instructionsList = response.analyzedInstructions.isEmpty? [] : response.analyzedInstructions[0].steps;
-    addNutrients(response.nutrition.nutrients);
+    if(connectivityResult == ConnectivityResult.none)
+    {
+      print("NO Internet");
+    }
+    else
+    {
+      final data = await http.get(headers: apiKey, Uri.parse(api));
+      final response = Food.fromJson(json.decode(data.body));
+
+      imageURL = response.image;
+      title = response.title;
+      isPopular = response.popular;
+      isCheap = response.cheap;
+      readyTime = response.readyInMinutes.toString();
+      healthScore = "${response.healthScore}/100";
+      serving = response.servings.toString();
+      type = response.dishTypes;
+      diet = response.diets ?? "General";
+      cuisine = response.cuisines ?? "Universal";
+      summary = response.summary;
+      ingredientsList = response.nutrition.ingredients;
+      instructionsList = response.analyzedInstructions.isEmpty? [] : response.analyzedInstructions[0].steps;
+      addNutrients(response.nutrition.nutrients);
+    }
+
     notifyListeners();
   }
 
@@ -282,7 +303,8 @@ class DataProviders extends ChangeNotifier
   
   showSelectedItems()
   {
-    return [
+    return
+    [
       selectedSort != ""? selectedSort : "",
       selectedDiet != ""? selectedDiet : "",
       selectedCuisine != ""? selectedCuisine : "",
