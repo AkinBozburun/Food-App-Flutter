@@ -3,8 +3,7 @@ class Food
   Food
   ({
     required this.popular, required this.cheap,required this.healthScore,
-    required this.id, required this.title,
-    required this.cookingMinutes, required this.readyInMinutes,
+    required this.id, required this.title, required this.readyInMinutes,
     required this.servings, required this.image,
     required this.nutrition, required this.summary,
     required this.dishTypes, required this.diets,
@@ -16,7 +15,6 @@ class Food
   late final int healthScore;
   late final int id;
   late final String title;
-  late final int cookingMinutes;
   late final int readyInMinutes;  
   late final int servings;
   late final String image;
@@ -34,7 +32,6 @@ class Food
     healthScore = json['healthScore'];
     id = json['id'];
     title = json['title'];
-    cookingMinutes = json['cookingMinutes'];
     readyInMinutes = json['readyInMinutes'];
     servings = json['servings'];
     image = json['image'];

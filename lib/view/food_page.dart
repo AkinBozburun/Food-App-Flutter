@@ -77,18 +77,24 @@ _customAppbar(context)
 
 _bodyFood(context)
 {
-  foodInfoIcon(iconName, String info) => Container
-  (
-    margin: const EdgeInsets.only(right: 8),
-    width: 72,
-    child: Column
-    (children:
-    [
-      SizedBox(height: 48,child: Image.asset("images/$iconName.png")),
-      const SizedBox(height: 12),
-      Flexible(child: Text(info, overflow: TextOverflow.clip, textAlign: TextAlign.center, style: Styles().foodPageText)),
-    ]),
-  );
+  foodInfoIcon(iconName, String info)
+  {
+    String capitilizedText(text) =>
+    text![0].toString().toUpperCase()+text.toString().substring(1).toLowerCase();
+
+    return Container
+    (
+      margin: const EdgeInsets.only(right: 8),
+      width: 72,
+      child: Column
+      (children:
+      [
+        SizedBox(height: 48,child: Image.asset("images/$iconName.png")),
+        const SizedBox(height: 12),
+        Flexible(child: Text(capitilizedText(info), overflow: TextOverflow.clip, textAlign: TextAlign.center, style: Styles().foodPageText)),
+      ]),
+    );
+  }
 
   columnPart(titleText, List<Widget> children) => Column
   (
@@ -120,6 +126,8 @@ _bodyFood(context)
       ],
     ),
   );
+
+  
 
   final prov = Provider.of<AppBarProviders>(context,listen: false);
   final provider = Provider.of<DataProviders>(context);
@@ -179,7 +187,6 @@ _bodyFood(context)
                     provider.isPopular == true? foodInfoIcon("popular","Very Popular") : const Center(),
                     provider.isCheap == true ? foodInfoIcon("losses", "Low Budget") : const Center(),                    
                     foodInfoIcon("time", "${provider.readyTime} Minutes"),
-                    foodInfoIcon("cooking", provider.cookTime),
                     foodInfoIcon("healthcare", provider.healthScore),
                     foodInfoIcon("serving", "${provider.serving} Serving"),
                     foodInfoIcon("restaurant", provider.type),

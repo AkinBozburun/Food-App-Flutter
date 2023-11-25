@@ -172,11 +172,9 @@ String selectedCuisine = "";
 
 class DataProviders extends ChangeNotifier
 {
-
   final apiKey = {"x-api-key" : "b3615cad35ab43ee8a6d5892e149ff05"};
 
   bool isGrid = false;
-
   int offset = 0;
   int totalResult = 0;
   List<Results>? recipeList;
@@ -205,6 +203,12 @@ class DataProviders extends ChangeNotifier
     notifyListeners();
   }
   
+  listOrGrid()
+  {
+    isGrid = !isGrid;
+    notifyListeners();
+  }
+  
   extendList() async
   {
     offset = recipeList!.length;
@@ -214,16 +218,13 @@ class DataProviders extends ChangeNotifier
     recipeList!.addAll(response.results);
     notifyListeners();
   }
-
-  //late Food response;
-
+  
   String imageURL = "";
   String title = "";
 
   bool isPopular = false;
   bool isCheap = false;
 
-  String cookTime = "";
   String readyTime = "";
   String healthScore = "";
   String serving = "";
@@ -234,7 +235,7 @@ class DataProviders extends ChangeNotifier
   String summary = "";
 
   List<Ingredients> ingredientsList = [];
-  List<Steps> instructionsList = [];
+  List instructionsList = [];
   List<Nutrients> nutrientsList = [];
 
   fetchRecipeByID(String id) async
@@ -248,17 +249,15 @@ class DataProviders extends ChangeNotifier
     title = response.title;
     isPopular = response.popular;
     isCheap = response.cheap;
-    cookTime = response.readyInMinutes >0 ? "No Cooking" : response.readyInMinutes.toString();
     readyTime = response.readyInMinutes.toString();
     healthScore = "${response.healthScore}/100";
     serving = response.servings.toString();
     type = response.dishTypes;
-    diet = response.diets ?? "All diets";
+    diet = response.diets ?? "General";
     cuisine = response.cuisines ?? "Universal";
     summary = response.summary;
     ingredientsList = response.nutrition.ingredients;
-    List<AnalyzedInstructions> instruction = response.analyzedInstructions;
-    instructionsList = instruction[0].steps;
+    instructionsList = response.analyzedInstructions.isEmpty? [] : response.analyzedInstructions[0].steps;
     addNutrients(response.nutrition.nutrients);
     notifyListeners();
   }
@@ -281,7 +280,6 @@ class DataProviders extends ChangeNotifier
     }
   }
   
-
   showSelectedItems()
   {
     return [
@@ -295,10 +293,5 @@ class DataProviders extends ChangeNotifier
   {
     fetchListData(selectedType, selectedQuery, selectedSort, selectedDiet, selectedCuisine);
   }
-
-  listOrGrid()
-  {
-    isGrid = !isGrid;
-    notifyListeners();
-  }
+ 
 }
