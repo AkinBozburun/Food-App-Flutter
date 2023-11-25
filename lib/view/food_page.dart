@@ -85,13 +85,13 @@ _bodyFood(context)
     return Container
     (
       margin: const EdgeInsets.only(right: 8),
-      width: 72,
+      width: 74,
       child: Column
       (children:
       [
         SizedBox(height: 48,child: Image.asset("images/$iconName.png")),
         const SizedBox(height: 12),
-        Flexible(child: Text(capitilizedText(info), overflow: TextOverflow.clip, textAlign: TextAlign.center, style: Styles().foodPageText)),
+        Flexible(child: Text(capitilizedText(info), overflow: TextOverflow.visible, textAlign: TextAlign.center, style: Styles().foodPageText)),
       ]),
     );
   }
@@ -126,8 +126,6 @@ _bodyFood(context)
       ],
     ),
   );
-
-  
 
   final prov = Provider.of<AppBarProviders>(context,listen: false);
   final provider = Provider.of<DataProviders>(context);
@@ -178,7 +176,7 @@ _bodyFood(context)
               ),
               SizedBox
               (
-                height: 92,
+                height: 98,
                 child: ListView
                 (
                   scrollDirection: Axis.horizontal,
@@ -230,8 +228,8 @@ _bodyFood(context)
                   ),
                 ]
               ),
-              Divider(color: Styles.greyColor),
-              columnPart
+              provider.instructionsList.isEmpty? const Center() : Divider(color: Styles.greyColor),
+              provider.instructionsList.isEmpty? const Center() : columnPart
               (
                 "Instructions",
                 [

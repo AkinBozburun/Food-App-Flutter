@@ -19,7 +19,7 @@ class ResultsPage extends StatefulWidget
 
 class _ResultsPageState extends State<ResultsPage>
 {
-  final controller = ScrollController();  
+  final controller = ScrollController();
 
   initController()
   {
@@ -78,7 +78,7 @@ _appbar(foodName,context)
       decoration: InputDecoration
       (
         contentPadding: Measures.all8,
-        hintText: "Search for recipes!",
+        hintText: "Search for $foodName!",
         border: InputBorder.none,
         hintStyle: Styles().searchBarHintText,
       ),
