@@ -194,26 +194,19 @@ class DataProviders extends ChangeNotifier
     String? sortText = sort != null? "sort=$sort" : null;
     String? dietText = diet != null? "diet=$diet" : null;
     String? cuisineText = cuisine != null? "cuisine=$cuisine" : null;
-    String? direction = sortDirection != null? "sortDirection=$sortDirection": null;
+    String? direction = sortDirection == null || sortDirection == false? "sortDirection=desc": "sortDirection=asc";
 
     api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$queryText&$sortText&$direction&$dietText&$cuisineText&number=32&offset=";
 
-    final connectivityResult = await (Connectivity().checkConnectivity());
-
-    if(connectivityResult == ConnectivityResult.none)
-    {
-      print("No ınternet");
-    }
-    else
-    {
-      final data = await http.get(headers: apiKey, Uri.parse(api+offset.toString()));
-      final response = Recipes.fromJson(json.decode(data.body));
-      totalResult = response.totalResults;
-      recipeList = [];    
-      recipeList!.addAll(response.results);
-    }
-
+    
+    final data = await http.get(headers: apiKey, Uri.parse(api+offset.toString()));
+    final response = Recipes.fromJson(json.decode(data.body));
+    totalResult = response.totalResults;
+    recipeList = [];    
+    recipeList!.addAll(response.results);
     notifyListeners();
+
+    print(api);
   }
 
   listDirection()

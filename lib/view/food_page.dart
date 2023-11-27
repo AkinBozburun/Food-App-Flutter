@@ -86,8 +86,7 @@ _bodyFood(context)
     (
       margin: const EdgeInsets.only(right: 8),
       width: 74,
-      child: Column
-      (children:
+      child: Column(children:
       [
         SizedBox(height: 48,child: Image.asset("images/$iconName.png")),
         const SizedBox(height: 12),

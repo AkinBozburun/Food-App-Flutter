@@ -111,7 +111,16 @@ _appbar(foodName,context)
       (
         onPressed: ()=> provider.listOrGrid(),
         icon: Icon(provider.isGrid == false? Icons.list_outlined : Icons.grid_on, color: Styles.whiteColor),
-      )
+      ),
+      IconButton(onPressed: ()
+      {
+        provider.listDirection();
+        provider.fetchListData(selectedType, selectedQuery, selectedSort, selectedSortDirection, selectedDiet, selectedCuisine);
+      },
+      icon:SizedBox(height: 24,width: 24,child: Image.asset
+      (
+        selectedSortDirection == true? "images/desc.png": "images/asc.png"
+      )))
     ],
   );
 }
