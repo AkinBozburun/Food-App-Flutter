@@ -170,6 +170,7 @@ String selectedQuery = "";
 String selectedSort = "";
 String selectedDiet = "";
 String selectedCuisine = "";
+bool selectedSortDirection = true;
 
 class DataProviders extends ChangeNotifier
 {
@@ -182,7 +183,7 @@ class DataProviders extends ChangeNotifier
 
   late String api;
 
-  fetchListData(String? type, String? query, String? sort, String? diet, String? cuisine) async
+  fetchListData(String? type, String? query, String? sort, bool? sortDirection, String? diet, String? cuisine) async
   {
     selectedType = type;
     selectedQuery = query ?? "";
@@ -193,8 +194,9 @@ class DataProviders extends ChangeNotifier
     String? sortText = sort != null? "sort=$sort" : null;
     String? dietText = diet != null? "diet=$diet" : null;
     String? cuisineText = cuisine != null? "cuisine=$cuisine" : null;
+    String? direction = sortDirection != null? "sortDirection=$sortDirection": null;
 
-    api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$queryText&$sortText&$dietText&$cuisineText&number=32&offset=";
+    api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$queryText&$sortText&$direction&$dietText&$cuisineText&number=32&offset=";
 
     final connectivityResult = await (Connectivity().checkConnectivity());
 
@@ -211,6 +213,12 @@ class DataProviders extends ChangeNotifier
       recipeList!.addAll(response.results);
     }
 
+    notifyListeners();
+  }
+
+  listDirection()
+  {
+    selectedSortDirection = !selectedSortDirection;
     notifyListeners();
   }
   
@@ -313,7 +321,6 @@ class DataProviders extends ChangeNotifier
 
   gatherSelectedItems()
   {
-    fetchListData(selectedType, selectedQuery, selectedSort, selectedDiet, selectedCuisine);
+    fetchListData(selectedType, selectedQuery, selectedSort, selectedSortDirection, selectedDiet, selectedCuisine);
   }
- 
-}
+ }

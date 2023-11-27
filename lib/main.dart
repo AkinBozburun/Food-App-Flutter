@@ -1,14 +1,20 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:my_food_app/utils/providers.dart';
 import 'package:my_food_app/view/main_page.dart';
 import 'package:my_food_app/view/no_internet_page.dart';
 import 'package:provider/provider.dart';
 
-void main()
+void main() async
 {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  //await Hive.initFlutter();
+  //Hive.registerAdapter(FavCitiesAdapter());
+  //Hive.openBox<FavCities>("favCities");
   runApp(const MyApp());
 }
 
