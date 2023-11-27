@@ -170,7 +170,7 @@ String selectedQuery = "";
 String selectedSort = "";
 String selectedDiet = "";
 String selectedCuisine = "";
-bool selectedSortDirection = true;
+bool selectedSortDirection = false;
 
 class DataProviders extends ChangeNotifier
 {
@@ -189,15 +189,30 @@ class DataProviders extends ChangeNotifier
     selectedQuery = query ?? "";
     offset = 0;
 
+    sortFix()
+    {
+      if(selectedSort == "Populars")
+      {
+        return "Popularity";
+      }
+      if(selectedSort == "Meta Score")
+      {
+        return "meta-data";
+      }
+      else
+      {
+        return sort;
+      }
+    }
+
     String? typeText = type != null? "type=$type" : null;
     String? queryText = query != null? "query=$query" : null;
-    String? sortText = sort != null? "sort=$sort" : null;
+    String? sortText = sort != null? "sort=${sortFix()}" : null;
     String? dietText = diet != null? "diet=$diet" : null;
     String? cuisineText = cuisine != null? "cuisine=$cuisine" : null;
     String? direction = sortDirection == null || sortDirection == false? "sortDirection=desc": "sortDirection=asc";
 
-    api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$queryText&$sortText&$direction&$dietText&$cuisineText&number=32&offset=";
-
+    api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$queryText&$sortText&$direction&$dietText&$cuisineText&addRecipeInformation=true&number=32&offset=";
     
     final data = await http.get(headers: apiKey, Uri.parse(api+offset.toString()));
     final response = Recipes.fromJson(json.decode(data.body));
@@ -302,15 +317,12 @@ class DataProviders extends ChangeNotifier
     }
   }
   
-  showSelectedItems()
-  {
-    return
-    [
-      selectedSort != ""? selectedSort : "",
-      selectedDiet != ""? selectedDiet : "",
-      selectedCuisine != ""? selectedCuisine : "",
-    ];
-  }
+  showSelectedItems() =>
+  [
+    selectedSort != ""? selectedSort : "",
+    selectedDiet != ""? selectedDiet : "",
+    selectedCuisine != ""? selectedCuisine : "",
+  ];
 
   gatherSelectedItems()
   {

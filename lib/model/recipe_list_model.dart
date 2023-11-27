@@ -16,11 +16,22 @@ class Recipes
 
 class Results
 {
-  Results({required this.id, required this.title, required this.image, required this.nutrition});
+  Results
+  ({
+    required this.id, required this.title, required this.image,
+    required this.veryHealthy, required this.veryPopular,
+    required this.healthScore, required this.readyInMinutes,
+    required this.spoonacularScore, required this.nutrition
+  });
 
   late final int id;
   late final String title;
   late final String image;
+  late final bool veryHealthy;
+  late final bool veryPopular;
+  late final int healthScore;
+  late final int readyInMinutes;
+  late final double spoonacularScore;
   late final NutritionInList? nutrition;
   
   Results.fromJson(Map<String, dynamic> json)
@@ -28,6 +39,11 @@ class Results
     id = json['id'];
     title = json['title'];
     image = json['image'];
+    veryHealthy = json['veryHealthy'];
+    veryPopular = json['veryPopular'];
+    healthScore = json['healthScore'];
+    readyInMinutes = json['readyInMinutes'];
+    spoonacularScore = json['spoonacularScore'];
     nutrition = json['nutrition'] == null ? null : NutritionInList.fromJson(json['nutrition']);
   }
 }

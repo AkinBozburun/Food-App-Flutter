@@ -112,15 +112,6 @@ _appbar(foodName,context)
         onPressed: ()=> provider.listOrGrid(),
         icon: Icon(provider.isGrid == false? Icons.list_outlined : Icons.grid_on, color: Styles.whiteColor),
       ),
-      IconButton(onPressed: ()
-      {
-        provider.listDirection();
-        provider.fetchListData(selectedType, selectedQuery, selectedSort, selectedSortDirection, selectedDiet, selectedCuisine);
-      },
-      icon:SizedBox(height: 24,width: 24,child: Image.asset
-      (
-        selectedSortDirection == true? "images/desc.png": "images/asc.png"
-      )))
     ],
   );
 }
@@ -128,6 +119,30 @@ _appbar(foodName,context)
 _foodList(context, width, controller)
 {
   final provider = Provider.of<DataProviders>(context);
+
+  String subTitle(index)
+  {
+    if(provider.recipeList![index].nutrition != null)
+    {
+      return "${provider.recipeList![index].nutrition!.nutrients[0].name} : ${provider.recipeList![index].nutrition!.nutrients[0].amount.toInt()} ${provider.recipeList![index].nutrition!.nutrients[0].unit}";
+    }
+    else
+    {
+      if(selectedSort == "Meta Score")
+      {
+        return "$selectedSort: ${provider.recipeList![index].spoonacularScore.toInt()/10} / 10";
+      }
+      if(selectedSort == "Healthiness")
+      {
+        return "Health Score: ${provider.recipeList![index].healthScore}";
+      }
+      if(selectedSort == "Time")
+      {
+        return "$selectedSort: ${provider.recipeList![index].readyInMinutes} min.";
+      }
+    }
+    return "";
+  }
 
   if(provider.recipeList == null)
   {
@@ -166,12 +181,7 @@ _foodList(context, width, controller)
             child: ListTile
             (
               title: Text(provider.recipeList![index].title, style: Styles().foodListText),
-              subtitle: provider.recipeList![index].nutrition == null ? null : 
-              Text
-              (
-               "${provider.recipeList![index].nutrition!.nutrients[0].name} : ${provider.recipeList![index].nutrition!.nutrients[0].amount.toInt()} ${provider.recipeList![index].nutrition!.nutrients[0].unit}",
-               style: Styles().foodListSubText
-              ),
+              subtitle: Text(subTitle(index),style: Styles().foodListSubText)
             )
           ),
           Icon(Icons.keyboard_arrow_right_rounded,color: Styles.blackColor, size: 26),

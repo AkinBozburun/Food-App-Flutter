@@ -79,7 +79,7 @@ _bodyFood(context)
 {
   foodInfoIcon(iconName, String info)
   {
-    String capitilizedText(text) =>
+    String capitilizedText(String? text) =>
     text![0].toString().toUpperCase()+text.toString().substring(1).toLowerCase();
 
     return Container

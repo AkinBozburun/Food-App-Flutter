@@ -21,6 +21,7 @@ class FilterBottomSheet extends StatelessWidget
 _bottomSheet(context)
 {
   double deviceWidth = MediaQuery.of(context).size.width;
+  final provider = Provider.of<DataProviders>(context,listen: false);
 
   showModalBottomSheet
   (
@@ -37,6 +38,15 @@ _bottomSheet(context)
         children:
         [
           Container(height: 4,width: 36,color: Styles.darkGreyColor),
+          Row(mainAxisAlignment: MainAxisAlignment.end, children:
+          [
+            Text(selectedSortDirection == true? "Descending": "Ascending"),
+            IconButton(onPressed: () => provider.listDirection(),
+            icon:SizedBox(height: 24,width: 24, child: Image.asset
+            (
+              selectedSortDirection == true? "images/desc.png": "images/asc.png"
+            )))
+          ]),
           _gridview(context,"Sort by", sortList, deviceWidth),
           _gridview(context,"Diet", dietList, deviceWidth),
           _gridview(context,"Cuisine", cuisinesList, deviceWidth),

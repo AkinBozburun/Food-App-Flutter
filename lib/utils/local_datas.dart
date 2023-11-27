@@ -32,25 +32,25 @@ List categories =
 List sortList =
 [
   {
-    "text" : "Popularity"
+    "text" : "Populars",    
   },
   {
-    "text" : "Time"
+    "text" : "Meta Score",
   },
   {
-    "text" : "Price"
+    "text" : "Time",    
   },
   {
-    "text" : "Healthiness"
+    "text" : "Healthiness",    
   },
   {
-    "text" : "Calories"
+    "text" : "Calories",    
   },
   {
-    "text" : "Protein"
+    "text" : "Protein",    
   },
   {
-    "text" : "Carbohydrates"
+    "text" : "Carbohydrates",    
   },
 ];
 
