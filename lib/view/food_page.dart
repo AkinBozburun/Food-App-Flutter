@@ -79,8 +79,8 @@ _bodyFood(context)
 {
   foodInfoIcon(iconName, String info)
   {
-    String capitilizedText(String? text) =>
-    text![0].toString().toUpperCase()+text.toString().substring(1).toLowerCase();
+    String capitilizedText(String text) =>
+    text[0].toString().toUpperCase()+text.toString().substring(1).toLowerCase();
 
     return Container
     (
@@ -129,7 +129,7 @@ _bodyFood(context)
   final prov = Provider.of<AppBarProviders>(context,listen: false);
   final provider = Provider.of<DataProviders>(context);
 
-  return SingleChildScrollView
+  return provider.imageURL == ""? Center(child: CircularProgressIndicator(color: Styles.greenColor)) : SingleChildScrollView
   (
     controller: prov.scrollController,
     child: Column
@@ -138,8 +138,7 @@ _bodyFood(context)
       [
         Stack(children:
         [
-          SizedBox(height: 300,width: double.maxFinite, child: provider.imageURL ==""? 
-          Center(child: CircularProgressIndicator(color: Styles.greenColor)) : Image.network(provider.imageURL)),
+          SizedBox(height: 300,width: double.maxFinite, child: Image.network(provider.imageURL)),
           SafeArea
           (
             child: GestureDetector
