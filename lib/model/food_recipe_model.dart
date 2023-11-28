@@ -2,7 +2,7 @@ class Food
 {
   Food
   ({
-    required this.popular, required this.cheap,required this.healthScore,
+    required this.popular, required this.healthScore,
     required this.id, required this.title, required this.readyInMinutes,
     required this.servings, required this.image,
     required this.nutrition, required this.summary,
@@ -11,7 +11,6 @@ class Food
   });
 
   late final bool popular;
-  late final bool cheap;
   late final int healthScore;
   late final int id;
   late final String title;
@@ -28,7 +27,6 @@ class Food
   Food.fromJson(Map<String, dynamic> json)
   {
     popular = json['veryPopular'];
-    cheap = json['cheap'];
     healthScore = json['healthScore'];
     id = json['id'];
     title = json['title'];

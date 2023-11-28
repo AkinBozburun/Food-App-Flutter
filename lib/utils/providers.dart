@@ -250,7 +250,7 @@ class DataProviders extends ChangeNotifier
   String title = "";
 
   bool isPopular = false;
-  bool isCheap = false;
+  bool isHealty = false;
 
   String readyTime = "";
   String healthScore = "";
@@ -283,7 +283,6 @@ class DataProviders extends ChangeNotifier
       imageURL = response.image;
       title = response.title;
       isPopular = response.popular;
-      isCheap = response.cheap;
       readyTime = response.readyInMinutes.toString();
       healthScore = "${response.healthScore}/100";
       serving = response.servings.toString();

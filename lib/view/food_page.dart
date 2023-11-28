@@ -181,8 +181,7 @@ _bodyFood(context)
                   scrollDirection: Axis.horizontal,
                   children:
                   [
-                    provider.isPopular == true? foodInfoIcon("popular","Very Popular") : const Center(),
-                    provider.isCheap == true ? foodInfoIcon("losses", "Low Budget") : const Center(),                    
+                    provider.isPopular == true? foodInfoIcon("popular","Very Popular") : const Center(),             
                     foodInfoIcon("time", "${provider.readyTime} Minutes"),
                     foodInfoIcon("healthcare", provider.healthScore),
                     foodInfoIcon("serving", "${provider.serving} Serving"),

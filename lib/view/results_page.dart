@@ -138,7 +138,7 @@ _foodList(context, width, controller)
       }
       if(selectedSort == "Time")
       {
-        return "$selectedSort: ${provider.recipeList![index].readyInMinutes} min.";
+        return "Ready in ${provider.recipeList![index].readyInMinutes} minutes";
       }
     }
     return "";
@@ -181,8 +181,9 @@ _foodList(context, width, controller)
             child: ListTile
             (
               title: Text(provider.recipeList![index].title, style: Styles().foodListText),
-              subtitle: Text(subTitle(index),style: Styles().foodListSubText)
-            )
+              subtitle: Text(subTitle(index),style: Styles().foodListSubText),
+              trailing: provider.recipeList![index].veryHealthy == true? SizedBox(width: 16, height: 16, child: Image.asset("images/healthy.png")) : null,
+            ),
           ),
           Icon(Icons.keyboard_arrow_right_rounded,color: Styles.blackColor, size: 26),
         ])),
@@ -228,13 +229,9 @@ _foodList(context, width, controller)
                 title: Text
                 (
                   provider.recipeList![index].title, style: Styles().foodListText,
-                  maxLines: provider.recipeList![index].nutrition == null ? 3 : 2, overflow: TextOverflow.ellipsis,
+                  maxLines: 2, overflow: TextOverflow.ellipsis,
                 ),
-                subtitle: provider.recipeList![index].nutrition == null ? null : Text
-                (
-                  "${provider.recipeList![index].nutrition!.nutrients[0].name} : ${provider.recipeList![index].nutrition!.nutrients[0].amount.toInt()} ${provider.recipeList![index].nutrition!.nutrients[0].unit}",
-                  style: Styles().foodListSubText
-                ),
+                subtitle: Text(subTitle(index),style: Styles().foodListSubText),
               ),
             ],
           ),
