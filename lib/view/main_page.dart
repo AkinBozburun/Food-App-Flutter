@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_food_app/main.dart';
 import 'package:my_food_app/utils/local_datas.dart';
 import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/providers.dart';
@@ -186,7 +187,7 @@ _categories(context,width)
               filterProv.clearAllButtons();
               dataProv.fetchListData(categories[index]["text"],null,null,null,null, null);
               Navigator.push(context, MaterialPageRoute(builder: (context) =>
-              ResultsPage(foodName: categories[index]["text"], deviceWidth: width)));
+              NetCheck(page: ResultsPage(foodName: categories[index]["text"], deviceWidth: width))));
             },
             child: Container
             (
@@ -233,7 +234,7 @@ _recently(width,context)
           itemCount: 6,
           itemBuilder: (context, index) => GestureDetector
           (
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FoodPage())),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NetCheck(page: FoodPage()))),
             child: Container
             (
               width: width*0.3,

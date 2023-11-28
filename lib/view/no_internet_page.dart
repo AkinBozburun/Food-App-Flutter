@@ -14,7 +14,6 @@ class NoInternetPage extends StatefulWidget
 
 class _NoInternetPageState extends State<NoInternetPage>
 {
-
   _netCheck(context) async
   {
     final connectivityResult = await (Connectivity().checkConnectivity());
@@ -22,7 +21,7 @@ class _NoInternetPageState extends State<NoInternetPage>
     {
       Navigator.pushAndRemoveUntil
       (
-        context,MaterialPageRoute(builder: (context) => const NetCheck()),
+        context,MaterialPageRoute(builder: (context) => const NetCheck(page: null)),
         (route) => false
       );
     }

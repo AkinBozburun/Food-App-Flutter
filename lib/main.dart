@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget
       (
         debugShowCheckedModeBanner: false,
         theme: ThemeData(useMaterial3: true),
-        home: const NetCheck(),
+        home: const MainPage()
       ),
     );
   }
@@ -45,7 +45,9 @@ class MyApp extends StatelessWidget
 
 class NetCheck extends StatefulWidget
 {
-  const NetCheck({super.key});
+  final page;
+  
+  const NetCheck({super.key, required this.page}); 
 
   @override
   State<NetCheck> createState() => _NetCheckState();
@@ -53,13 +55,7 @@ class NetCheck extends StatefulWidget
 
 class _NetCheckState extends State<NetCheck>
 {
-  Future _netCheck() async
-  {
-    final connectivityResult = await (Connectivity().checkConnectivity());
-    return connectivityResult;
-  }
-
-@override
+  @override
   void initState()
   {
     FlutterNativeSplash.remove();
@@ -71,7 +67,7 @@ class _NetCheckState extends State<NetCheck>
   {
     return FutureBuilder
     (
-      future: _netCheck(),
+      future: Connectivity().checkConnectivity(),
       builder: (context, snapshot)
       {
         if(snapshot.data == ConnectivityResult.none)
@@ -80,7 +76,7 @@ class _NetCheckState extends State<NetCheck>
         }
         else
         {
-          return const MainPage();
+          return widget.page ?? const MainPage();
         }
       }
     );

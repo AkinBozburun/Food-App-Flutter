@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_food_app/main.dart';
 import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/providers.dart';
 import 'package:my_food_app/utils/styles.dart';
@@ -165,7 +166,7 @@ _foodList(context, width, controller)
         onTap: ()
         {
           provider.fetchRecipeByID(provider.recipeList![index].id.toString());
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const FoodPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const NetCheck(page: FoodPage())));
         },
         borderRadius: Measures.border12,
         child: Ink(width: width,child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:
@@ -182,13 +183,19 @@ _foodList(context, width, controller)
             (
               title: Text(provider.recipeList![index].title, style: Styles().foodListText),
               subtitle: Text(subTitle(index),style: Styles().foodListSubText),
-              trailing: provider.recipeList![index].veryHealthy == true? SizedBox(width: 16, height: 16, child: Image.asset("images/healthy.png")) : null,
+              trailing: Column(children:
+              [
+                SizedBox(width: 16, height: 16, child: provider.recipeList![index].veryHealthy == true ? Image.asset("images/healthcare.png") : null),
+                const SizedBox(height: 8),
+                SizedBox(width: 16, height: 16, child: provider.recipeList![index].veryPopular == true ? Image.asset("images/popular.png") : null),
+              ]),
             ),
-          ),
-          Icon(Icons.keyboard_arrow_right_rounded,color: Styles.blackColor, size: 26),
+          ),          
+          Icon(Icons.keyboard_arrow_right_rounded,color: Styles.blackColor),
         ])),
       ),
-      separatorBuilder: (context, index) => Divider(height: 24, color: Styles.greyColor))
+      separatorBuilder: (context, index) => Divider(height: 24, color: Styles.greyColor)
+    )
     : GridView.builder
     (
       controller: controller,

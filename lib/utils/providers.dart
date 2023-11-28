@@ -214,14 +214,16 @@ class DataProviders extends ChangeNotifier
 
     api = "https://api.spoonacular.com/recipes/complexSearch?$typeText&$queryText&$sortText&$direction&$dietText&$cuisineText&addRecipeInformation=true&number=32&offset=";
     
-    final data = await http.get(headers: apiKey, Uri.parse(api+offset.toString()));
-    final response = Recipes.fromJson(json.decode(data.body));
-    totalResult = response.totalResults;
-    recipeList = [];    
-    recipeList!.addAll(response.results);
-    notifyListeners();
-
-    print(api);
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if(connectivityResult != ConnectivityResult.none)
+    {
+      final data = await http.get(headers: apiKey, Uri.parse(api+offset.toString()));
+      final response = Recipes.fromJson(json.decode(data.body));
+      totalResult = response.totalResults;
+      recipeList = [];    
+      recipeList!.addAll(response.results);
+      notifyListeners();
+    }
   }
 
   listDirection()
@@ -270,21 +272,16 @@ class DataProviders extends ChangeNotifier
     String api = "https://api.spoonacular.com/recipes/$id/information?includeNutrition=true";
 
     final connectivityResult = await (Connectivity().checkConnectivity());
-
-    if(connectivityResult == ConnectivityResult.none)
-    {
-      print("NO Internet");
-    }
-    else
+    if(connectivityResult != ConnectivityResult.none)
     {
       final data = await http.get(headers: apiKey, Uri.parse(api));
-      final response = Food.fromJson(json.decode(data.body));
+      final response = Food.fromJson(json.decode(data.body));    
 
       imageURL = response.image;
       title = response.title;
       isPopular = response.popular;
       readyTime = response.readyInMinutes.toString();
-      healthScore = "${response.healthScore}/100";
+      healthScore = response.healthScore > 90? "Very healthy!" : "${response.healthScore}/100";
       serving = response.servings.toString();
       type = response.dishTypes;
       diet = response.diets ?? "General";
@@ -293,9 +290,9 @@ class DataProviders extends ChangeNotifier
       ingredientsList = response.nutrition.ingredients;
       instructionsList = response.analyzedInstructions.isEmpty? [] : response.analyzedInstructions[0].steps;
       addNutrients(response.nutrition.nutrients);
-    }
 
-    notifyListeners();
+      notifyListeners();
+    }    
   }
 
   addNutrients(List nutListData)
