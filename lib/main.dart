@@ -2,6 +2,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:my_food_app/model/recently_recipes_model.dart';
 import 'package:my_food_app/utils/providers.dart';
 import 'package:my_food_app/view/main_page.dart';
 import 'package:my_food_app/view/no_internet_page.dart';
@@ -12,9 +14,9 @@ void main() async
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-  //await Hive.initFlutter();
-  //Hive.registerAdapter(FavCitiesAdapter());
-  //Hive.openBox<FavCities>("favCities");
+  await Hive.initFlutter();  
+  Hive.registerAdapter(RecentlyRecipesAdapter());
+  await Hive.openBox<RecentlyRecipes>("recentlyRecipes");
   runApp(const MyApp());
 }
 
@@ -56,8 +58,8 @@ class NetCheck extends StatefulWidget
 class _NetCheckState extends State<NetCheck>
 {
   @override
-  void initState()
-  {
+  void initState() async
+  {    
     FlutterNativeSplash.remove();
     super.initState();
   }

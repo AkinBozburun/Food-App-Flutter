@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_food_app/main.dart';
+import 'package:my_food_app/utils/get_box.dart';
 import 'package:my_food_app/utils/local_datas.dart';
 import 'package:my_food_app/utils/measures.dart';
 import 'package:my_food_app/utils/providers.dart';
@@ -217,6 +218,9 @@ _categories(context,width)
 
 _recently(width,context)
 {
+  final provider = Provider.of<DataProviders>(context);  
+  final boxList = Boxes.getRecently().values.toList();
+
   return Column
   (
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,14 +231,18 @@ _recently(width,context)
       SizedBox
       (
         height: 212,
-        child: ListView.separated
+        child: boxList.isNotEmpty? ListView.separated
         (
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
-          itemCount: 6,
+          itemCount: boxList.length,
           itemBuilder: (context, index) => GestureDetector
           (
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NetCheck(page: FoodPage()))),
+            onTap: ()
+            {              
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const NetCheck(page: FoodPage())));
+              provider.fetchRecipeByID(boxList[index].recentlyID.toString());
+            },
             child: Container
             (
               width: width*0.3,
@@ -261,20 +269,20 @@ _recently(width,context)
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
                       [
-                        Text("Super Delicious Cake",style: Styles().recentlyText1),
+                        Text(boxList[index].recentlyName,style: Styles().recentlyText1),
                         const SizedBox(height: 6),
                         Row(children:
                         [
-                          SizedBox(height: 16, width: 16, child: Image.asset("images/time.png")),
+                          SizedBox(height: 16, width: 16, child: Image.asset(boxList[index].recentlyPhoto)),
                           const SizedBox(width: 6),
-                          Text("12 Min.", style: Styles().recentlyText2),
+                          Text(boxList[index].recentlyReadyTime, style: Styles().recentlyText2),
                         ]),
                         const SizedBox(height: 6),
                         Row(children:
                         [
                           const Icon(Icons.star_rounded,size: 18),
                           const SizedBox(width: 2),
-                          Text("6/10", style: Styles().recentlyText3),
+                          Text(boxList[index].recentlyScore, style: Styles().recentlyText3),
                         ]),
                       ],
                     ),
@@ -284,7 +292,7 @@ _recently(width,context)
             ),
           ),
           separatorBuilder: (context, index) => const SizedBox(width: 12),
-        ),
+        ) : Center(child: Text("Your recently recipes shows here.",style: Styles().categorieText)),
       ),
     ],
   );

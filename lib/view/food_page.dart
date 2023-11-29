@@ -20,7 +20,7 @@ class _FoodPageState extends State<FoodPage>
   {
     Provider.of<AppBarProviders>(context,listen: false).initscroll();
     super.initState();
-  }
+  }  
 
   @override
   Widget build(BuildContext context)

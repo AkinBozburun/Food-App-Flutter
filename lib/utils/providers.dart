@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:my_food_app/model/food_recipe_model.dart';
+import 'package:my_food_app/model/recently_recipes_model.dart';
 import 'package:my_food_app/model/recipe_list_model.dart';
+import 'package:my_food_app/utils/get_box.dart';
 import 'package:my_food_app/utils/local_datas.dart';
 import 'package:my_food_app/utils/styles.dart';
 import 'package:http/http.dart' as http;
@@ -248,6 +250,7 @@ class DataProviders extends ChangeNotifier
     notifyListeners();
   }
   
+  int foodID = 0;
   String imageURL = "";
   String title = "";
 
@@ -266,6 +269,8 @@ class DataProviders extends ChangeNotifier
   List instructionsList = [];
   List<Nutrients> nutrientsList = [];
 
+  double score = 0;
+
   fetchRecipeByID(String id) async
   {
     String api = "https://api.spoonacular.com/recipes/$id/information?includeNutrition=true";
@@ -276,6 +281,7 @@ class DataProviders extends ChangeNotifier
       final data = await http.get(headers: apiKey, Uri.parse(api));
       final response = Food.fromJson(json.decode(data.body));
 
+      foodID = response.id;
       imageURL = response.image;
       title = response.title;
       isPopular = response.popular;
@@ -286,12 +292,25 @@ class DataProviders extends ChangeNotifier
       diet = response.diets ?? "General";
       cuisine = response.cuisines ?? "Universal";
       summary = response.summary;
+      score = response.spoonacularScore;
       ingredientsList = response.nutrition.ingredients;
       instructionsList = response.analyzedInstructions.isEmpty? [] : response.analyzedInstructions[0].steps;
       addNutrients(response.nutrition.nutrients);
-
       notifyListeners();
-    }    
+      
+      final box = Boxes.getRecently();
+
+      if(!box.containsKey(response.id))
+      {
+        final favs = RecentlyRecipes()
+        ..recentlyID = response.id
+        ..recentlyName = response.title
+        ..recentlyPhoto = response.image
+        ..recentlyReadyTime = "${response.readyInMinutes} Minutes"
+        ..recentlyScore = "${response.spoonacularScore.toInt()/10} / 10}";
+        box.put(response.id, favs);
+      }
+    }
   }
 
   addNutrients(List nutListData)
@@ -322,5 +341,13 @@ class DataProviders extends ChangeNotifier
   gatherSelectedItems()
   {
     fetchListData(selectedType, selectedQuery, selectedSort, selectedSortDirection, selectedDiet, selectedCuisine);
+  }
+
+  deleteFromBox(index)
+  {
+    final box = Boxes.getRecently();
+
+    box.deleteAt(index);
+    notifyListeners();
   }
  }

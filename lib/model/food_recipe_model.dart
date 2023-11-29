@@ -7,9 +7,9 @@ class Food
     required this.servings, required this.image,
     required this.nutrition, required this.summary,
     required this.dishTypes, required this.diets,
-    required this.cuisines, required this.analyzedInstructions
+    required this.cuisines, required this.analyzedInstructions, required this.spoonacularScore
   });
-
+  
   late final bool popular;
   late final bool healthy;
   late final int healthScore;
@@ -24,6 +24,7 @@ class Food
   late final String? cuisines;
   late final String summary;
   late final List<AnalyzedInstructions> analyzedInstructions;
+  late final double spoonacularScore;
   
   Food.fromJson(Map<String, dynamic> json)
   {
@@ -41,6 +42,7 @@ class Food
     cuisines = json['cuisines'].isEmpty ? null : json['cuisines'][0];
     summary = json['summary'];
     analyzedInstructions = List.from(json['analyzedInstructions']).map((e)=>AnalyzedInstructions.fromJson(e)).toList();
+    spoonacularScore = json['spoonacularScore'];
   }
 }
 
