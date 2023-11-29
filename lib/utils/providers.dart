@@ -252,7 +252,6 @@ class DataProviders extends ChangeNotifier
   String title = "";
 
   bool isPopular = false;
-  bool isHealty = false;
 
   String readyTime = "";
   String healthScore = "";
@@ -275,13 +274,13 @@ class DataProviders extends ChangeNotifier
     if(connectivityResult != ConnectivityResult.none)
     {
       final data = await http.get(headers: apiKey, Uri.parse(api));
-      final response = Food.fromJson(json.decode(data.body));    
+      final response = Food.fromJson(json.decode(data.body));
 
       imageURL = response.image;
       title = response.title;
       isPopular = response.popular;
       readyTime = response.readyInMinutes.toString();
-      healthScore = response.healthScore > 90? "Very healthy!" : "${response.healthScore}/100";
+      healthScore = response.healthScore > 90 || response.healthy == true?  "Very healthy!" : "${response.healthScore}/100";
       serving = response.servings.toString();
       type = response.dishTypes;
       diet = response.diets ?? "General";

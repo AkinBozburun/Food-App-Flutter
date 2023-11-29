@@ -145,6 +145,11 @@ _foodList(context, width, controller)
     return "";
   }
 
+  Widget iconBadge(double position, child, index)
+  {
+    return Positioned(top: position,child: SizedBox(width: 24, height: 24, child: child));
+  }
+
   if(provider.recipeList == null)
   {
     return Center(child: CircularProgressIndicator(color: Styles.greenColor));
@@ -171,26 +176,32 @@ _foodList(context, width, controller)
         borderRadius: Measures.border12,
         child: Ink(width: width,child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:
         [
-          ClipRRect
+          Stack
           (
-            borderRadius: Measures.border12,
-            child: Image.network(provider.recipeList![index].image,width: 82, height: 82, fit: BoxFit.cover),
+            children:
+            [         
+              ClipRRect
+              (
+                borderRadius: Measures.border12,
+                child: Image.network(provider.recipeList![index].image,width: 102, height: 102, fit: BoxFit.cover),
+              ),
+              iconBadge(32,provider.recipeList![index].veryPopular == true ? Image.asset("images/popular-badge.png") : null, index),
+              iconBadge(8,provider.recipeList![index].veryHealthy == true ? Image.asset("images/healthcare-badge.png") : null, index),
+            ],
           ),
           SizedBox
           (
-            width: width*0.65,
-            child: ListTile
+            width: width*0.5,
+            child: Column
             (
-              title: Text(provider.recipeList![index].title, style: Styles().foodListText),
-              subtitle: Text(subTitle(index),style: Styles().foodListSubText),
-              trailing: Column(children:
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:
               [
-                SizedBox(width: 16, height: 16, child: provider.recipeList![index].veryHealthy == true ? Image.asset("images/healthcare.png") : null),
-                const SizedBox(height: 8),
-                SizedBox(width: 16, height: 16, child: provider.recipeList![index].veryPopular == true ? Image.asset("images/popular.png") : null),
-              ]),
-            ),
-          ),          
+                Text(provider.recipeList![index].title, style: Styles().foodListText),
+                Text(subTitle(index),style: Styles().foodListSubText),
+              ],
+            )
+          ),
           Icon(Icons.keyboard_arrow_right_rounded,color: Styles.blackColor),
         ])),
       ),
@@ -206,7 +217,7 @@ _foodList(context, width, controller)
         crossAxisCount: 2,
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
-        childAspectRatio: 80/100
+        childAspectRatio: 75/100
       ),
       itemBuilder: (context, index) => GestureDetector
       (
@@ -226,10 +237,18 @@ _foodList(context, width, controller)
           (
             children:
             [
-              ClipRRect
+              Stack
               (
-                borderRadius: BorderRadius.only(topLeft: Measures.radius16,topRight: Measures.radius16),
-                child: Image.network(provider.recipeList![index].image, fit: BoxFit.cover),
+                children:
+                [
+                  ClipRRect
+                  (
+                    borderRadius: BorderRadius.only(topLeft: Measures.radius16,topRight: Measures.radius16),
+                    child: Image.network(provider.recipeList![index].image, fit: BoxFit.cover),
+                  ),
+                  iconBadge(42,provider.recipeList![index].veryPopular == true ? Image.asset("images/popular-badge.png") : null, index),
+                  iconBadge(12,provider.recipeList![index].veryHealthy == true ? Image.asset("images/healthcare-badge.png") : null, index),
+                ],
               ),
               ListTile
               (
