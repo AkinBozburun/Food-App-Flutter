@@ -230,14 +230,14 @@ _recently(width,context)
       const SizedBox(height: 12),
       SizedBox
       (
-        height: 212,
+        height: boxList.isNotEmpty? 212 : 24,
         child: boxList.isNotEmpty? ListView.separated
         (
-          shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemCount: boxList.length,
           itemBuilder: (context, index) => GestureDetector
           (
+            onLongPress: () => provider.deleteFromBox(index),
             onTap: ()
             {              
               Navigator.push(context, MaterialPageRoute(builder: (context) => const NetCheck(page: FoodPage())));
@@ -258,7 +258,7 @@ _recently(width,context)
                   ClipRRect
                   (
                     borderRadius: BorderRadius.only(topLeft: Measures.radius16,topRight: Measures.radius16),
-                    child: Image.asset("images/cake.jpg",fit: BoxFit.cover,height: 104)
+                    child: Image.network(boxList[index].recentlyPhoto,fit: BoxFit.cover,height: 104)
                   ),
                   const SizedBox(height: 6),
                   Container
@@ -269,16 +269,16 @@ _recently(width,context)
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
                       [
-                        Text(boxList[index].recentlyName,style: Styles().recentlyText1),
-                        const SizedBox(height: 6),
-                        Row(children:
+                        Text(boxList[index].recentlyName, maxLines: 2, overflow: TextOverflow.ellipsis, style: Styles().recentlyText1),
+                        const SizedBox(height: 12),
+                        Row(children: //ReadyTime Row
                         [
-                          SizedBox(height: 16, width: 16, child: Image.asset(boxList[index].recentlyPhoto)),
+                          SizedBox(height: 16, width: 16, child: Image.asset("images/time.png")),
                           const SizedBox(width: 6),
                           Text(boxList[index].recentlyReadyTime, style: Styles().recentlyText2),
                         ]),
                         const SizedBox(height: 6),
-                        Row(children:
+                        Row(children: //Score Row
                         [
                           const Icon(Icons.star_rounded,size: 18),
                           const SizedBox(width: 2),

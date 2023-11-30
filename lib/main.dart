@@ -58,7 +58,7 @@ class NetCheck extends StatefulWidget
 class _NetCheckState extends State<NetCheck>
 {
   @override
-  void initState() async
+  void initState()
   {    
     FlutterNativeSplash.remove();
     super.initState();

@@ -307,7 +307,7 @@ class DataProviders extends ChangeNotifier
         ..recentlyName = response.title
         ..recentlyPhoto = response.image
         ..recentlyReadyTime = "${response.readyInMinutes} Minutes"
-        ..recentlyScore = "${response.spoonacularScore.toInt()/10} / 10}";
+        ..recentlyScore = "${response.spoonacularScore.toInt()/10} / 10";
         box.put(response.id, favs);
       }
     }
